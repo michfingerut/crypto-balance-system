@@ -153,7 +153,38 @@ describe('BalanceServiceController (e2e)', () => {
         }),
       );
     });
-    it('basic .DELETE', async () => {});
-    it('.DELETE on non existing asset', async () => {});
+
+    it('basic .DELETE', async () => {
+      const expectedData = {
+        coin: 'bitcoin',
+        amount: 2,
+      };
+
+      const postRes = await req
+        .post(route)
+        .send(expectedData)
+        .set('X-User-ID', userId);
+
+      testUtils.testResponse(postRes, CREATED, expectedData);
+      const id = postRes.body.id;
+
+      const deleteRes = await req
+        .delete(`${route}/${id}`)
+        .set('X-User-ID', userId);
+      expect(deleteRes.statusCode).toBe(OK);
+      //TODO: testUtils.testResponse(postRes, OK, {});
+
+      const getRes = await req.get(route).set('X-User-ID', userId);
+
+      testUtils.testResponse(getRes, OK, []);
+    });
+
+    it('.DELETE on non existing asset', async () => {
+      const deleteRes = await req
+        .delete(`${route}/10`)
+        .set('X-User-ID', userId);
+      expect(deleteRes.statusCode).toBe(OK);
+      //TODO: testUtils.testResponse(postRes, OK, {});
+    });
   });
 });
