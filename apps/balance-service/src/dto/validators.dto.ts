@@ -1,0 +1,18 @@
+import { IsString, IsNumber, IsInt, Min } from 'class-validator';
+import { Transform } from 'class-transformer';
+
+export class CreateAssetDto {
+  @IsString()
+  coin: string;
+
+  @Transform(({ value }) => Number(value))
+  @IsNumber()
+  @Min(0)
+  amount: number;
+}
+
+export class IdDto {
+  @Transform(({ value }) => Number(value))
+  @IsInt()
+  id: number;
+}
