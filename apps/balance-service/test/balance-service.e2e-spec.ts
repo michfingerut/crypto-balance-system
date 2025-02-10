@@ -31,7 +31,7 @@ describe('BalanceServiceController (e2e)', () => {
       expect(res.statusCode).toBe(UNAUTHORIZED);
     });
 
-    it.skip('.POST validation', async () => {
+    it('.POST validation', async () => {
       const invalidBody = [
         undefined,
         {},
@@ -39,17 +39,15 @@ describe('BalanceServiceController (e2e)', () => {
         { amount: 5 },
         { coin: 'bit coin' },
         //wrong types
-        // { amount: true, coin: 'bit coin' },
+        { amount: true, coin: 'bit coin' },
         //wrong parameters:
-        // { amount: 2, coin: 'bit coin', michal: true },
+        //TODO: { amount: 2, coin: 'bit coin', michal: true },
       ];
 
-      await Promise.all(
-        invalidBody.map(async (body) => {
-          const res = await req.post(route).send(body).set('X-User-ID', userId);
-          return expect(res.statusCode).toBe(BAD_REQUEST);
-        }),
-      );
+      for (const body of invalidBody) {
+        const res = await req.post(route).send(body).set('X-User-ID', userId);
+        expect(res.statusCode).toBe(BAD_REQUEST);
+      }
     });
 
     it.skip('basic .POST', async () => {

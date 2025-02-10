@@ -5,7 +5,12 @@ export class CreateAssetDto {
   @IsString()
   coin: string;
 
-  @Transform(({ value }) => Number(value))
+  @Transform(({ value }) => {
+    if (typeof value === 'string' && !isNaN(Number(value))) {
+      return parseFloat(value);
+    }
+    return value;
+  })
   @IsNumber()
   @Min(0)
   amount: number;
