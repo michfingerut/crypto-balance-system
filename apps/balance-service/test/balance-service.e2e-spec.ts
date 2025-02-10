@@ -131,8 +131,34 @@ describe('BalanceServiceController (e2e)', () => {
       );
     });
 
-    it('basic .GET /total', async () => {});
-    it('.GET /total on non existing userId', async () => {});
+    it('basic .GET /total', async () => {
+      const expectedData = {
+        coin: 'bitcoin',
+        amount: 2,
+        id: 0,
+      };
+
+      const postRes = await req
+        .post(route)
+        .send({ coin: expectedData.coin, amount: expectedData.amount })
+        .set('X-User-ID', userId);
+
+      testUtils.testResponse(postRes, CREATED, expectedData);
+
+      const getRes = await req.get(`${route}/total`).set('X-User-ID', userId);
+
+      expect(getRes.statusCode).toBe(OK);
+
+      //TODO: testUtils.testResponse(getRes, OK, []);
+    });
+
+    it('.GET /total on non existing userId', async () => {
+      const res = await req
+        .get(`${route}/total`)
+        .set('X-User-ID', testUtils.getRandomUuid());
+
+      testUtils.testResponse(res, OK, []);
+    });
   });
 
   describe('.DELETE /balance', () => {
