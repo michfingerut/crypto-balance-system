@@ -1,12 +1,39 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  Headers,
+} from '@nestjs/common';
 import { BalanceServiceService } from './balance-service.service';
 
-@Controller()
+@Controller('balance')
 export class BalanceServiceController {
   constructor(private readonly balanceServiceService: BalanceServiceService) {}
 
-  @Get()
-  getHello(): string {
-    return this.balanceServiceService.getHello();
+  @Get() // /balance
+  getAssetsOfUser(@Headers('X-User-ID') userId: string) {
+    return [];
+  }
+
+  @Get() // /balance?coin=
+  getCalculationOfTotalAssets(
+    @Headers('X-User-ID') userId: string,
+    @Query('coin') coin: 'USD' | 'EUR' | 'NIS',
+  ) {
+    return 1;
+  }
+
+  @Post() // /balance
+  createAssets(@Headers('X-User-ID') userId: string, @Body() asstesInfo: {}) {
+    return {};
+  }
+
+  @Delete(':id') // /balance/:id
+  removeAsset(@Headers('X-User-ID') userId: string, @Param('id') id: string) {
+    return 'success';
   }
 }
