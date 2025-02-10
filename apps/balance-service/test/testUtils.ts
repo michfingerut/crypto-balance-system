@@ -1,12 +1,13 @@
-import crypto from 'node:crypto';
 import _ from 'lodash';
+import { nanoid } from 'nanoid';
+
 const statusCode = {
   SUCCESS: { OK: 20, CREATED: 201 },
   ERROR: { BAD_REQUEST: 400, FORBIDDEN: 403 },
 };
 
 const getRandomUuid = () => {
-  return crypto.randomUUID();
+  return nanoid();
 };
 
 //TODO
