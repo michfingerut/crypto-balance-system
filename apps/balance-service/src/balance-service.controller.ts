@@ -19,7 +19,7 @@ export class BalanceServiceController {
     return [];
   }
 
-  @Get() // /balance?coin=
+  @Get('total') // /balance/total?coin=
   getCalculationOfTotalAssets(
     @Headers('X-User-ID') userId: string,
     @Query('coin') coin: 'USD' | 'EUR' | 'NIS',
@@ -29,7 +29,7 @@ export class BalanceServiceController {
 
   @Post() // /balance
   createAssets(@Headers('X-User-ID') userId: string, @Body() asstesInfo: {}) {
-    return {};
+    return asstesInfo;
   }
 
   @Delete(':id') // /balance/:id
