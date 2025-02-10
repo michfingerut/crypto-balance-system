@@ -28,7 +28,10 @@ export class BalanceServiceController {
   }
 
   @Post() // /balance
-  createAssets(@Headers('X-User-ID') userId: string, @Body() asstesInfo: {}) {
+  createAssets(
+    @Headers('X-User-ID') userId: string,
+    @Body() asstesInfo: { coin: string; amount: number },
+  ) {
     return asstesInfo;
   }
 
