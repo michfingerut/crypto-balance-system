@@ -63,6 +63,8 @@ describe('BalanceServiceController (e2e)', () => {
         .send(expectedData)
         .set('X-User-ID', userId);
 
+      expect(res.body.id).toBeDefined();
+
       testUtils.testResponse(res, CREATED, expectedData);
     });
   });
