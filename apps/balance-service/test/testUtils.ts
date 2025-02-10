@@ -1,13 +1,13 @@
 import _ from 'lodash';
-import { nanoid } from 'nanoid';
+import { v4 as uuidv4 } from 'uuid';
 
 const statusCode = {
   SUCCESS: { OK: 20, CREATED: 201 },
-  ERROR: { BAD_REQUEST: 400, FORBIDDEN: 403 },
+  ERROR: { BAD_REQUEST: 400, UNAUTHORIZED: 401, FORBIDDEN: 403 },
 };
 
 const getRandomUuid = () => {
-  return nanoid();
+  return uuidv4();
 };
 
 //TODO
