@@ -113,7 +113,24 @@ describe('BalanceServiceController (e2e)', () => {
       expect(res.statusCode).toBe(FORBIDDEN);
     });
 
-    it('.GET /total validation', async () => {});
+    it('.GET /total validation', async () => {
+      const invalidQuery = [
+        {},
+        //missing params
+        { role: 'role' },
+      ];
+
+      await Promise.all(
+        invalidQuery.map(async (query) => {
+          const res = await req
+            .get(`${route}/total`)
+            .query(query)
+            .set('X-User-ID', userId);
+          return expect(res.statusCode).toBe(BAD_REQUEST);
+        }),
+      );
+    });
+
     it('basic .GET /total', async () => {});
     it('.GET /total on non existing userId', async () => {});
   });
@@ -124,7 +141,18 @@ describe('BalanceServiceController (e2e)', () => {
       expect(res.statusCode).toBe(FORBIDDEN);
     });
 
-    it('.DELETE validation', async () => {});
+    it('.DELETE validation', async () => {
+      const invalidIds = [{}, 'not valid id', true];
+
+      await Promise.all(
+        invalidIds.map(async (id) => {
+          const res = await req
+            .delete(`${route}/${id}`)
+            .set('X-User-ID', userId);
+          return expect(res.statusCode).toBe(BAD_REQUEST);
+        }),
+      );
+    });
     it('basic .DELETE', async () => {});
     it('.DELETE on non existing asset', async () => {});
   });
