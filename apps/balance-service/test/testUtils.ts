@@ -1,8 +1,21 @@
-import _ from 'lodash';
+import * as _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
+import { promises as fs } from 'fs';
+import * as path from 'path';
+
+const dataFilePath = path.join(__dirname, '..', 'data', 'balanceData.json');
+
+const clearFile = async () => {
+  try {
+    // Clear the JSON file after each test
+    await fs.writeFile(dataFilePath, JSON.stringify([], null, 2), 'utf-8');
+  } catch (error) {
+    console.error('Error clearing balance data file:', error);
+  }
+};
 
 const statusCode = {
-  SUCCESS: { OK: 20, CREATED: 201 },
+  SUCCESS: { OK: 200, CREATED: 201 },
   ERROR: { BAD_REQUEST: 400, UNAUTHORIZED: 401, FORBIDDEN: 403 },
 };
 
@@ -12,7 +25,7 @@ const getRandomUuid = () => {
 
 //TODO
 const compareData = (recivedData: any, expectedData: any) => {
-  return Object.keys(expectedData).forEach((key) => {
+  return Object.keys(recivedData).forEach((key) => {
     expect(recivedData[key]).toEqual(expectedData[key]);
   });
 };
@@ -39,6 +52,7 @@ const testResponse = (
 };
 
 export default {
+  clearFile,
   statusCode,
   getRandomUuid,
   compareData,

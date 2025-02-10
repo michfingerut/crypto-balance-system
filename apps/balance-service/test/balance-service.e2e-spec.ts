@@ -26,6 +26,9 @@ describe('BalanceServiceController (e2e)', () => {
   });
 
   describe('.POST /balance', () => {
+    beforeEach(async () => {
+      testUtils.clearFile();
+    });
     it('authorization', async () => {
       const res = await req.post(route).send({});
       expect(res.statusCode).toBe(UNAUTHORIZED);
@@ -50,46 +53,48 @@ describe('BalanceServiceController (e2e)', () => {
       }
     });
 
-    it.skip('basic .POST', async () => {
-      const expectedData = {
+    it('basic .POST', async () => {
+      const toSend = {
         coin: 'bitcoin',
         amount: 2,
       };
 
-      const res = await req
-        .post(route)
-        .send(expectedData)
-        .set('X-User-ID', userId);
+      const res = await req.post(route).send(toSend).set('X-User-ID', userId);
 
       expect(res.body.id).toBeDefined();
 
+      const expectedData = { ...toSend, userId: userId, id: res.body.id };
       testUtils.testResponse(res, CREATED, expectedData);
     });
   });
 
   describe('.GET /balance', () => {
+    beforeEach(async () => {
+      testUtils.clearFile();
+    });
     it('authorization', async () => {
       const res = await req.get(route);
       expect(res.statusCode).toBe(UNAUTHORIZED);
     });
 
-    it.skip('basic .GET assets', async () => {
-      const expectedData = {
+    it('basic .GET assets', async () => {
+      const toSend = {
         coin: 'bitcoin',
         amount: 2,
-        id: 0,
       };
 
       const postRes = await req
         .post(route)
-        .send({ coin: expectedData.coin, amount: expectedData.amount })
+        .send(toSend)
         .set('X-User-ID', userId);
 
+      const expectedData = { ...toSend, userId: userId, id: postRes.body.id };
+
       testUtils.testResponse(postRes, CREATED, expectedData);
-      expectedData.id = postRes.body.id;
 
       const getRes = await req.get(route).set('X-User-ID', userId);
-      testUtils.testResponse(getRes, OK, [expectedData]);
+
+      testUtils.testResponse(getRes, OK, [expectedData], 'id');
     });
 
     it.skip('.GET user with no assets', async () => {
@@ -98,6 +103,44 @@ describe('BalanceServiceController (e2e)', () => {
         .set('X-User-ID', testUtils.getRandomUuid());
 
       testUtils.testResponse(res, OK, []);
+    });
+
+    it('complex .GET', async () => {
+      const expectedData: any = [];
+      const user1ToSend = [
+        {
+          coin: 'bitcoin',
+          amount: 2,
+        },
+        {
+          coin: 'sol',
+          amount: 0.5,
+        },
+      ];
+
+      const user2ToSend = [
+        {
+          coin: 'bitcoin',
+          amount: 0.5,
+        },
+        {
+          coin: 'sol',
+          amount: 0.5,
+        },
+      ];
+      const user2UUID = testUtils.getRandomUuid();
+
+      for (const body of user1ToSend) {
+        const res = await req.post(route).send(body).set('X-User-ID', userId);
+        expectedData.push(res.body);
+      }
+
+      for (const body of user2ToSend) {
+        await req.post(route).send(body).set('X-User-ID', user2UUID);
+      }
+
+      const getRes = await req.get(route).set('X-User-ID', userId);
+      testUtils.testResponse(getRes, OK, expectedData, 'id');
     });
   });
 
@@ -157,6 +200,9 @@ describe('BalanceServiceController (e2e)', () => {
   });
 
   describe('.DELETE /balance', () => {
+    beforeEach(async () => {
+      testUtils.clearFile();
+    });
     it('authorization', async () => {
       const res = await req.delete(`${route}/1`);
       expect(res.statusCode).toBe(UNAUTHORIZED);
