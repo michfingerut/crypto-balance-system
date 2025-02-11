@@ -53,7 +53,7 @@ describe('BalanceServiceController (e2e)', () => {
         { amount: 2, coin: '' },
 
         //wrong parameters:
-        //{ amount: 2, coin: 'bit coin', michal: true },
+        //TODO:{ amount: 2, coin: 'bit coin', michal: true },
       ];
 
       for (const body of invalidBody) {
