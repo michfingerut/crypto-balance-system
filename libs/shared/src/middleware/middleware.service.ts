@@ -4,6 +4,7 @@ import { isUUID } from 'class-validator';
 import { CBSLogging } from '@app/shared/logging/logging.controller';
 import { CBSError } from '@app/shared/error/error.controller';
 
+//TODO: move to utils
 @Injectable()
 export class ValidateUserIdMiddleware implements NestMiddleware {
   private readonly logger = new CBSLogging(ValidateUserIdMiddleware.name);
