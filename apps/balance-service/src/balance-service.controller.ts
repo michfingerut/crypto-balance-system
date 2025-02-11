@@ -10,7 +10,7 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { BalanceDataService } from './balance-service.service';
-import { CreateAssetDto } from './dto/validators.dto';
+import { CreateAssetDto } from './dto/create-asset.dto';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 
 //TODO: add loggings
