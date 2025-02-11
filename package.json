@@ -6,10 +6,11 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build": "nest build && npm run copy-assets",
+    "copy-assets": "mkdir -p ./dist/apps/data && (test ! -f ./dist/apps/data/balanceData.json && cp ./apps/balance-service/data/balanceData.json ./dist/apps/data/balanceData.json) || echo 'File already exists, skipping copy.'",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "nest start --watch",
+    "start:dev": "npm run build && nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/crypto-balance-system/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
