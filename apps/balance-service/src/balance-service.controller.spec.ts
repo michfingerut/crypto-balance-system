@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BalanceServiceController } from './balance-service.controller';
 import { BalanceDataService } from './balance-service.service';
+import { CBSLogging } from '@app/shared/logging/logging.controller';
 
 describe('RateServiceController', () => {
   let balanceServiceController: BalanceServiceController;
@@ -8,7 +9,13 @@ describe('RateServiceController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [BalanceServiceController],
-      providers: [BalanceDataService],
+      providers: [
+        BalanceDataService,
+        {
+          provide: CBSLogging,
+          useValue: { log: jest.fn() },
+        },
+      ],
     }).compile();
 
     balanceServiceController = app.get<BalanceServiceController>(
