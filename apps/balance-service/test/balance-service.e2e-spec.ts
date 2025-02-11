@@ -13,7 +13,7 @@ describe('BalanceServiceController (e2e)', () => {
 
   //codes
   const { OK, CREATED } = testUtils.statusCode.SUCCESS;
-  const { BAD_REQUEST, UNAUTHORIZED } = testUtils.statusCode.ERROR;
+  const { BAD_REQUEST, UNAUTHORIZED, FORBIDDEN } = testUtils.statusCode.ERROR;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -258,6 +258,29 @@ describe('BalanceServiceController (e2e)', () => {
 
       expect(deleteRes.statusCode).toBe(OK);
       testUtils.testResponse(deleteRes, OK, {});
+    });
+
+    it('.DELETE other user asset', async () => {
+      const toSend = {
+        coin: 'bitcoin',
+        amount: 2,
+      };
+
+      const postRes = await req
+        .post(route)
+        .send(toSend)
+        .set('X-User-ID', userId);
+
+      const id = postRes.body?.id;
+      const expectedData = { ...toSend, userId: userId, id: id };
+
+      testUtils.testResponse(postRes, CREATED, expectedData);
+
+      const deleteRes = await req
+        .delete(`${route}/${id}`)
+        .set('X-User-ID', testUtils.getRandomUuid());
+
+      expect(deleteRes.statusCode).toBe(FORBIDDEN);
     });
   });
 });

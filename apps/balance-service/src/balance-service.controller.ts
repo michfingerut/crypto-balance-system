@@ -48,6 +48,6 @@ export class BalanceServiceController {
     @Headers('X-User-ID') userId: string,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return await this.balanceDataService.removeAssets(id);
+    return await this.balanceDataService.removeAssets(id, userId);
   }
 }

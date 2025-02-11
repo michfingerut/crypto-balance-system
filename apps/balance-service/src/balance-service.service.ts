@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 
@@ -37,13 +41,17 @@ export class BalanceDataService {
     return newEntry;
   }
 
-  async removeAssets(id: number): Promise<BalanceEntry | {}> {
+  async removeAssets(id: number, userId: string): Promise<BalanceEntry | {}> {
     //check if user exist in the file
     const balanceEntries = await this.readDataFromFile();
     const index = balanceEntries.findIndex((entry) => entry.id === id);
     if (index === -1) {
       //if not exist, return 200 and empty object
       return {};
+    }
+
+    if (balanceEntries[index].userId !== userId) {
+      throw new ForbiddenException('Cant remove the asset');
     }
 
     const [removedEntry] = balanceEntries.splice(index, 1);
