@@ -41,6 +41,7 @@ export class BalanceServiceController {
     @Headers('X-User-ID') userId: string,
     @Body(ValidationPipe) asstesInfo: CreateAssetDto,
   ) {
+    //TODO: need to validate that the coin is a real coin name
     const res = await this.balanceDataService.addAssets(userId, asstesInfo);
 
     this.logger.log(`${res.id} was created succssefuly`);
