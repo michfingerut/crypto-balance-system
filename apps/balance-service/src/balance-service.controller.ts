@@ -12,16 +12,17 @@ import {
 import { BalanceDataService } from './balance-service.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { ValidationPipe } from '@nestjs/common';
+import { CBSLogging } from '@app/shared/logging/logging.controller';
 
-//TODO: add loggings
 @Controller('balance')
 export class BalanceServiceController {
+  private logger = new CBSLogging(BalanceServiceController.name);
   constructor(private readonly balanceDataService: BalanceDataService) {}
 
   @Get()
   async getAssetsOfUser(@Headers('X-User-ID') userId: string) {
     const res = await this.balanceDataService.getAssets(userId);
-    //Logger.log(`Get assets of ${userId}`);
+    this.logger.log(`Get assets of ${userId}`);
     return res;
   }
 
@@ -42,7 +43,7 @@ export class BalanceServiceController {
   ) {
     const res = await this.balanceDataService.addAssets(userId, asstesInfo);
 
-    //Logger.log(`${res.id} was created succssefuly`);
+    this.logger.log(`${res.id} was created succssefuly`);
 
     return res;
   }
@@ -53,7 +54,7 @@ export class BalanceServiceController {
     @Param('id', ParseIntPipe) id: number,
   ) {
     const res = await this.balanceDataService.removeAssets(id, userId);
-    //Logger.log(`${id} was deleted succssefuly`);
+    this.logger.log(`${id} was deleted succssefuly`);
 
     return res;
   }

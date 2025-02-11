@@ -4,7 +4,7 @@ import { LoggingModule } from './logging/logging.module';
 
 @Module({
   providers: [SharedService],
-  exports: [SharedService],
+  exports: [SharedService, LoggingModule],
   imports: [LoggingModule],
 })
 export class SharedModule {}
