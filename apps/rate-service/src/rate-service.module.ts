@@ -1,12 +1,20 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { RateServiceController } from './rate-service.controller';
-import { RateServiceService } from './rate-service.service';
+import { RateService } from './rate-service.service';
 import { ValidateUserIdMiddleware } from '@app/shared/middleware/middleware.service';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
-  imports: [],
+  imports: [
+    ScheduleModule.forRoot(),
+    CacheModule.register({
+      store: 'memory',
+      ttl: 600,
+    }),
+  ],
   controllers: [RateServiceController],
-  providers: [RateServiceService],
+  providers: [RateService],
 })
 export class RateServiceModule {
   configure(consumer: MiddlewareConsumer) {

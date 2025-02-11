@@ -33,13 +33,13 @@ describe('RateServiceController (e2e)', () => {
     expect(res2.statusCode).toBe(UNAUTHORIZED);
   });
 
-  it.skip('validation', async () => {
+  it('validation', async () => {
     const invalidQuery = [
       {},
       //wrong params
       { role: 'role' },
       //wrong type
-      { coin: 'role' },
+      { coin: '' },
     ];
 
     await Promise.all(
