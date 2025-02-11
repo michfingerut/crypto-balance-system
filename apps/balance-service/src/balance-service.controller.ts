@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { BalanceDataService } from './balance-service.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
-import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 
 //TODO: add loggings
 @Controller('balance')
@@ -20,7 +20,9 @@ export class BalanceServiceController {
 
   @Get()
   async getAssetsOfUser(@Headers('X-User-ID') userId: string) {
-    return await this.balanceDataService.getAssets(userId);
+    const res = await this.balanceDataService.getAssets(userId);
+    //Logger.log(`Get assets of ${userId}`);
+    return res;
   }
 
   @Get('total') // /balance/total?coin=
@@ -33,13 +35,15 @@ export class BalanceServiceController {
     return 1;
   }
 
-  @Post() // /balance
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @Post()
   async createAssets(
     @Headers('X-User-ID') userId: string,
-    @Body() asstesInfo: CreateAssetDto,
+    @Body(ValidationPipe) asstesInfo: CreateAssetDto,
   ) {
     const res = await this.balanceDataService.addAssets(userId, asstesInfo);
+
+    //Logger.log(`${res.id} was created succssefuly`);
+
     return res;
   }
 
@@ -48,6 +52,9 @@ export class BalanceServiceController {
     @Headers('X-User-ID') userId: string,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return await this.balanceDataService.removeAssets(id, userId);
+    const res = await this.balanceDataService.removeAssets(id, userId);
+    //Logger.log(`${id} was deleted succssefuly`);
+
+    return res;
   }
 }
