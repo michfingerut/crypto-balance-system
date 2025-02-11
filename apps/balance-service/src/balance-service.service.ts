@@ -6,6 +6,8 @@ import {
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import { CreateAssetDto } from './dto/create-asset.dto';
+import { CBSLogging } from '@app/shared/logging/logging.controller';
+import { CBSError } from '@app/shared/error/error.controller';
 
 //TODO:
 export interface BalanceEntry {
@@ -22,6 +24,12 @@ export class BalanceDataService {
     'data',
     'balanceData.json',
   );
+  private logger: CBSLogging;
+  private readonly errCo = new CBSError();
+
+  constructor(logger: CBSLogging) {
+    this.logger = logger;
+  }
 
   async getAssets(userId: string): Promise<BalanceEntry[]> {
     const data = await this.readDataFromFile();
@@ -50,7 +58,9 @@ export class BalanceDataService {
     }
 
     if (balanceEntries[index].userId !== userId) {
-      throw new ForbiddenException('Cant remove the asset');
+      const message = 'Cant remove the asset';
+      this.logger.error(message);
+      this.errCo.errHandler(message, 403);
     }
 
     const [removedEntry] = balanceEntries.splice(index, 1);
@@ -63,6 +73,8 @@ export class BalanceDataService {
       const fileContent = await fs.readFile(this.dataFilePath, 'utf-8');
       return JSON.parse(fileContent) || [];
     } catch (error) {
+      const message = `Error reading from file:${error}`;
+      this.logger.error(message);
       throw new InternalServerErrorException('Error reading from file:', error);
     }
   }
@@ -75,7 +87,9 @@ export class BalanceDataService {
         'utf-8',
       );
     } catch (error) {
-      throw new InternalServerErrorException('Error reading from file:', error);
+      const message = `Error reading from file:${error}`;
+      this.logger.error(message);
+      this.errCo.errHandler(message);
     }
   }
 }

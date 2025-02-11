@@ -13,11 +13,11 @@ import { BalanceDataService } from './balance-service.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { ValidationPipe } from '@nestjs/common';
 import { CBSLogging } from '@app/shared/logging/logging.controller';
-
 @Controller('balance')
 export class BalanceServiceController {
-  private logger = new CBSLogging(BalanceServiceController.name);
-  constructor(private readonly balanceDataService: BalanceDataService) {}
+  private readonly logger = new CBSLogging(BalanceServiceController.name);
+  private readonly balanceDataService: BalanceDataService =
+    new BalanceDataService(this.logger);
 
   @Get()
   async getAssetsOfUser(@Headers('X-User-ID') userId: string) {
