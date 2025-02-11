@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { validate as isUUID } from 'uuid';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class ValidateUserIdMiddleware implements NestMiddleware {

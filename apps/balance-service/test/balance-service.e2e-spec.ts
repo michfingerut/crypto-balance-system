@@ -33,6 +33,9 @@ describe('BalanceServiceController (e2e)', () => {
     it('authorization', async () => {
       const res = await req.post(route).send({});
       expect(res.statusCode).toBe(UNAUTHORIZED);
+
+      const res2 = await req.post(route).send({}).set('X-User-ID', 'not uuid');
+      expect(res2.statusCode).toBe(UNAUTHORIZED);
     });
 
     it('.POST validation', async () => {
@@ -44,6 +47,8 @@ describe('BalanceServiceController (e2e)', () => {
         { coin: 'bit coin' },
         //wrong types
         { amount: true, coin: 'bit coin' },
+        { amount: -1, coin: 'bit coin' },
+
         //wrong parameters:
         //TODO: { amount: 2, coin: 'bit coin', michal: true },
       ];
@@ -77,6 +82,9 @@ describe('BalanceServiceController (e2e)', () => {
     it('authorization', async () => {
       const res = await req.get(route);
       expect(res.statusCode).toBe(UNAUTHORIZED);
+
+      const res2 = await req.get(route).set('X-User-ID', 'not uuid');
+      expect(res2.statusCode).toBe(UNAUTHORIZED);
     });
 
     it('basic .GET assets', async () => {
@@ -151,6 +159,9 @@ describe('BalanceServiceController (e2e)', () => {
     it('authorization', async () => {
       const res = await req.get(`${route}/total`);
       expect(res.statusCode).toBe(UNAUTHORIZED);
+
+      const res2 = await req.get(`${route}/total`).set('X-User-ID', 'not uuid');
+      expect(res2.statusCode).toBe(UNAUTHORIZED);
     });
 
     it('.GET /total validation', async () => {
@@ -209,6 +220,9 @@ describe('BalanceServiceController (e2e)', () => {
     it('authorization', async () => {
       const res = await req.delete(`${route}/1`);
       expect(res.statusCode).toBe(UNAUTHORIZED);
+
+      const res2 = await req.delete(`${route}/1`).set('X-User-ID', 'not uuid');
+      expect(res2.statusCode).toBe(UNAUTHORIZED);
     });
 
     it('.DELETE validation', async () => {
