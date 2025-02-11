@@ -6,8 +6,8 @@ import {
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import { CreateAssetDto } from './dto/create-asset.dto';
-import { CBSLogging } from '@app/shared/logging/logging.controller';
-import { CBSError } from '@app/shared/error/error.controller';
+import { CBSLogging } from '@app/shared/logging/logging.service';
+import { CBSError } from '@app/shared/error/error.service';
 
 //TODO:
 export interface BalanceEntry {
@@ -24,11 +24,10 @@ export class BalanceDataService {
     'data',
     'balanceData.json',
   );
-  private logger: CBSLogging;
-  private readonly errCo = new CBSError();
+  private errCo: CBSError;
 
   constructor(logger: CBSLogging) {
-    this.logger = logger;
+    this.errCo = new CBSError(logger);
   }
 
   async getAssets(userId: string): Promise<BalanceEntry[]> {
@@ -58,9 +57,7 @@ export class BalanceDataService {
     }
 
     if (balanceEntries[index].userId !== userId) {
-      const message = 'Cant remove the asset';
-      this.logger.error(message);
-      this.errCo.errHandler(message, HttpStatus.FORBIDDEN);
+      this.errCo.errHandler('Cant remove the asset', HttpStatus.FORBIDDEN);
     }
 
     const [removedEntry] = balanceEntries.splice(index, 1);
@@ -71,11 +68,10 @@ export class BalanceDataService {
   private async readDataFromFile(): Promise<BalanceEntry[]> {
     try {
       const fileContent = await fs.readFile(this.dataFilePath, 'utf-8');
-      return JSON.parse(fileContent) || [];
+      return JSON.parse(fileContent);
     } catch (error) {
-      const message = `Error reading from file:${error}`;
-      this.logger.error(message);
-      throw new InternalServerErrorException('Error reading from file:', error);
+      this.errCo.errHandler(`Error reading from file:${error}`);
+      return [];
     }
   }
 
@@ -87,9 +83,7 @@ export class BalanceDataService {
         'utf-8',
       );
     } catch (error) {
-      const message = `Error reading from file:${error}`;
-      this.logger.error(message);
-      this.errCo.errHandler(message);
+      this.errCo.errHandler(`Error reading from file:${error}`);
     }
   }
 }

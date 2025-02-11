@@ -1,24 +1,24 @@
 import {
   BadRequestException,
-  Controller,
   ForbiddenException,
   InternalServerErrorException,
   UnauthorizedException,
   HttpStatus,
   NotFoundException,
+  Injectable,
 } from '@nestjs/common';
-// import { CBSLogging } from '../logging/logging.controller';
+import { CBSLogging } from '../logging/logging.service';
 
-@Controller('error')
+@Injectable()
 export class CBSError {
-  // private logger: CBSLogging;
+  private logger: CBSLogging;
 
-  // constructor(logger: CBSLogging) {
-  //   this.logger = logger;
-  // }
+  constructor(logger: CBSLogging) {
+    this.logger = logger;
+  }
 
   errHandler(message: string, code?: number) {
-    //this.logger.error(message);
+    this.logger.error(message);
     switch (code) {
       case HttpStatus.BAD_REQUEST:
         throw new BadRequestException(message);

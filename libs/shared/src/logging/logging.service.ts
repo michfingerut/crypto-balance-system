@@ -1,6 +1,6 @@
-import { ConsoleLogger, Controller } from '@nestjs/common';
+import { ConsoleLogger, Controller, Injectable } from '@nestjs/common';
 
-@Controller('logging')
+@Injectable()
 export class CBSLogging extends ConsoleLogger {
   error(message: any, stack?: string, context?: string) {
     super.error(message, stack, context);

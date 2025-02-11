@@ -12,7 +12,7 @@ import {
 import { BalanceDataService } from './balance-service.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { ValidationPipe } from '@nestjs/common';
-import { CBSLogging } from '@app/shared/logging/logging.controller';
+import { CBSLogging } from '@app/shared/logging/logging.service';
 @Controller('balance')
 export class BalanceServiceController {
   private readonly logger = new CBSLogging(BalanceServiceController.name);
@@ -32,6 +32,7 @@ export class BalanceServiceController {
     @Query('coin') coin: 'USD' | 'EUR' | 'NIS',
   ) {
     //TODO: need to use the rate service API
+    // store existing coin in local cache to validate if exist
     //TODO: validation
     return 1;
   }
@@ -42,6 +43,7 @@ export class BalanceServiceController {
     @Body(ValidationPipe) asstesInfo: CreateAssetDto,
   ) {
     //TODO: need to validate that the coin is a real coin name
+    // store existing coin in local cache to validate if exist
     const res = await this.balanceDataService.addAssets(userId, asstesInfo);
 
     this.logger.log(`${res.id} was created succssefuly`);

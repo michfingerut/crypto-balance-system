@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CBSLogging } from './logging.controller';
+import { CBSLogging } from './logging.service';
 
 @Module({
   providers: [CBSLogging],

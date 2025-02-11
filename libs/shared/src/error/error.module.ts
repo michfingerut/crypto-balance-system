@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
-import { CBSError } from './error.controller';
+import { CBSError } from './error.service';
+import { LoggingModule } from '../logging/logging.module';
 
 @Module({
-  controllers: [CBSError],
+  imports: [LoggingModule],
+  providers: [CBSError],
+  exports: [CBSError],
 })
 export class ErrorModule {}
