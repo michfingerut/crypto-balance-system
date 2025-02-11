@@ -1,5 +1,5 @@
 import {
-  ForbiddenException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -60,7 +60,7 @@ export class BalanceDataService {
     if (balanceEntries[index].userId !== userId) {
       const message = 'Cant remove the asset';
       this.logger.error(message);
-      this.errCo.errHandler(message, 403);
+      this.errCo.errHandler(message, HttpStatus.FORBIDDEN);
     }
 
     const [removedEntry] = balanceEntries.splice(index, 1);
