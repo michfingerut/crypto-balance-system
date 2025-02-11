@@ -26,16 +26,29 @@ export class BalanceDataService {
     userId: string,
     data: Omit<BalanceEntry, 'userId' | 'id'>,
   ): Promise<BalanceEntry> {
+    //Generate ID for the assset
     const balanceEntries = await this.readDataFromFile();
     const newId = balanceEntries.length + 1;
+
     const newEntry: BalanceEntry = { ...data, userId, id: newId };
     balanceEntries.push(newEntry);
+
     await this.writeDataToFile(balanceEntries);
     return newEntry;
   }
 
-  async removeAssets(id: number): Promise<BalanceEntry> {
-    return { userId: 'aaa', amount: 0, coin: 'aaa', id: 1 };
+  async removeAssets(id: number): Promise<BalanceEntry | {}> {
+    //check if user exist in the file
+    const balanceEntries = await this.readDataFromFile();
+    const index = balanceEntries.findIndex((entry) => entry.id === id);
+    if (index === -1) {
+      //if not exist, return 200 and empty object
+      return {};
+    }
+
+    const [removedEntry] = balanceEntries.splice(index, 1);
+    await this.writeDataToFile(balanceEntries);
+    return removedEntry;
   }
 
   private async readDataFromFile(): Promise<BalanceEntry[]> {
