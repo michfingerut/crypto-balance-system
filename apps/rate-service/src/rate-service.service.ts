@@ -6,8 +6,6 @@ import axios from 'axios';
 import { Cache } from 'cache-manager';
 @Injectable()
 export class RateService {
-  private readonly coinGeckoUrl =
-    'https://api.coingecko.com/api/v3/simple/price';
   private errCo: CBSError;
 
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
@@ -15,7 +13,7 @@ export class RateService {
   }
 
   async getRate(coin: string, vsCoin: string) {
-    const cacheKey = `crypto-rate-${coin}-${vsCoin}`;
+    const cacheKey = ``;
 
     const cachedRates = await this.cacheManager.get(cacheKey);
     if (cachedRates) {
@@ -23,12 +21,6 @@ export class RateService {
     }
 
     try {
-      const response = await axios.get(this.coinGeckoUrl, {
-        params: { ids: coin, vs_currencies: vsCoin },
-      });
-      const rates = response.data;
-      await this.cacheManager.set(cacheKey, rates);
-      return rates;
     } catch (error) {
       this.errCo.errHandler('Not found coins', HttpStatus.NOT_FOUND);
     }
