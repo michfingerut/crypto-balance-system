@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RateServiceController } from './rate-service.controller';
-import { RateServiceService } from './rate-service.service';
+import { RateService } from './rate-service.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('RateServiceController', () => {
   let rateServiceController: RateServiceController;
@@ -8,7 +9,13 @@ describe('RateServiceController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [RateServiceController],
-      providers: [RateServiceService],
+      providers: [
+        RateService,
+        {
+          provide: CACHE_MANAGER,
+          useValue: { get: jest.fn(), set: jest.fn() },
+        },
+      ],
     }).compile();
 
     rateServiceController = app.get<RateServiceController>(
@@ -17,7 +24,7 @@ describe('RateServiceController', () => {
   });
 
   describe('root', () => {
-    it('should be defined"', () => {
+    it('should be defined', () => {
       expect(rateServiceController).toBeDefined();
     });
   });
