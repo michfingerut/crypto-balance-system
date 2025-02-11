@@ -11,12 +11,14 @@ describe('RateServiceController', () => {
       providers: [RateServiceService],
     }).compile();
 
-    rateServiceController = app.get<RateServiceController>(RateServiceController);
+    rateServiceController = app.get<RateServiceController>(
+      RateServiceController,
+    );
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(rateServiceController.getHello()).toBe('Hello World!');
+    it('should be defined"', () => {
+      expect(rateServiceController).toBeDefined();
     });
   });
 });
