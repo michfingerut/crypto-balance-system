@@ -45,12 +45,13 @@ describe('BalanceServiceController (e2e)', () => {
         //missing params
         { amount: 5 },
         { coin: 'bit coin' },
-        //wrong types
+        //not valid values
         { amount: true, coin: 'bit coin' },
         { amount: -1, coin: 'bit coin' },
+        { amount: 2, coin: '' },
 
         //wrong parameters:
-        //TODO: { amount: 2, coin: 'bit coin', michal: true },
+        //{ amount: 2, coin: 'bit coin', michal: true },
       ];
 
       for (const body of invalidBody) {

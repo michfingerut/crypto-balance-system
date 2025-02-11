@@ -1,8 +1,9 @@
-import { IsString, IsNumber, IsInt, Min } from 'class-validator';
+import { IsString, IsNumber, IsPositive, IsNotEmpty } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class CreateAssetDto {
   @IsString()
+  @IsNotEmpty()
   coin: string;
 
   @Transform(({ value }) => {
@@ -12,6 +13,6 @@ export class CreateAssetDto {
     return value;
   })
   @IsNumber()
-  @Min(0)
+  @IsPositive()
   amount: number;
 }

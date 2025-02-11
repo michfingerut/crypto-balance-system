@@ -5,7 +5,9 @@ import {
 } from '@nestjs/common';
 import { promises as fs } from 'fs';
 import * as path from 'path';
+import { CreateAssetDto } from './dto/create-asset.dto';
 
+//TODO:
 export interface BalanceEntry {
   userId: string;
   coin: string;
@@ -26,10 +28,7 @@ export class BalanceDataService {
     return data.filter((entry) => entry.userId === userId);
   }
 
-  async addAssets(
-    userId: string,
-    data: Omit<BalanceEntry, 'userId' | 'id'>,
-  ): Promise<BalanceEntry> {
+  async addAssets(userId: string, data: CreateAssetDto): Promise<BalanceEntry> {
     //Generate ID for the assset
     const balanceEntries = await this.readDataFromFile();
     const newId = balanceEntries.length + 1;
