@@ -3,9 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 
-const dataFilePath = path.join(__dirname, '..', 'data', 'balanceData.json');
-
-const clearFile = async () => {
+const clearFile = async (dataFilePath: string) => {
   try {
     // Clear the JSON file after each test
     await fs.writeFile(dataFilePath, JSON.stringify([], null, 2), 'utf-8');

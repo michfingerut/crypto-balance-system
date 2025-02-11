@@ -3,13 +3,15 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { BalanceServiceModule } from '../src/balance-service.module';
 import TestAgent from 'supertest/lib/agent';
-import testUtils from './testUtils';
+import testUtils from '../../../testUtils/index';
+import * as path from 'path';
 
 describe('BalanceServiceController (e2e)', () => {
   let app: INestApplication;
   let req: TestAgent;
   const route: string = '/balance';
   const userId = testUtils.getRandomUuid();
+  const dataFilePath = path.join(__dirname, '..', 'data', 'balanceData.json');
 
   //codes
   const { OK, CREATED } = testUtils.statusCode.SUCCESS;
@@ -27,7 +29,7 @@ describe('BalanceServiceController (e2e)', () => {
 
   describe('.POST /balance', () => {
     beforeEach(async () => {
-      testUtils.clearFile();
+      testUtils.clearFile(dataFilePath);
     });
 
     it('authorization', async () => {
@@ -77,7 +79,7 @@ describe('BalanceServiceController (e2e)', () => {
 
   describe('.GET /balance', () => {
     beforeEach(async () => {
-      testUtils.clearFile();
+      testUtils.clearFile(dataFilePath);
     });
 
     it('authorization', async () => {
@@ -215,7 +217,7 @@ describe('BalanceServiceController (e2e)', () => {
 
   describe('.DELETE /balance', () => {
     beforeEach(async () => {
-      testUtils.clearFile();
+      testUtils.clearFile(dataFilePath);
     });
 
     it('authorization', async () => {
