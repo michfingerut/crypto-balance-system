@@ -14,7 +14,12 @@ const clearFile = async (dataFilePath: string) => {
 
 const statusCode = {
   SUCCESS: { OK: 200, CREATED: 201 },
-  ERROR: { BAD_REQUEST: 400, UNAUTHORIZED: 401, FORBIDDEN: 403 },
+  ERROR: {
+    BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
+    FORBIDDEN: 403,
+    NOT_FOUND: 404,
+  },
 };
 
 const getRandomUuid = () => {

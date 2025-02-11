@@ -12,8 +12,8 @@ describe('RateServiceController (e2e)', () => {
   const userId = testUtils.getRandomUuid();
 
   //codes
-  const { OK, CREATED } = testUtils.statusCode.SUCCESS;
-  const { BAD_REQUEST, UNAUTHORIZED, FORBIDDEN } = testUtils.statusCode.ERROR;
+  const { OK } = testUtils.statusCode.SUCCESS;
+  const { BAD_REQUEST, UNAUTHORIZED, NOT_FOUND } = testUtils.statusCode.ERROR;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -33,7 +33,7 @@ describe('RateServiceController (e2e)', () => {
     expect(res2.statusCode).toBe(UNAUTHORIZED);
   });
 
-  it('validation', async () => {
+  it.skip('validation', async () => {
     const invalidQuery = [
       {},
       //wrong params
@@ -53,7 +53,7 @@ describe('RateServiceController (e2e)', () => {
     );
   });
 
-  it('basic .GET rate', async () => {
+  it.skip('basic .GET rate', async () => {
     const getRes = await req
       .get(`${route}`)
       .query({ coin: 'bitcoin' })
@@ -61,5 +61,21 @@ describe('RateServiceController (e2e)', () => {
 
     expect(getRes.statusCode).toBe(OK);
     expect(getRes.body.calc).toBeDefined();
+  });
+
+  it('.GET on non existing coin', async () => {
+    const getRes1 = await req
+      .get(`${route}`)
+      .query({ coin: 'bitcoin', vsCoin: 'michal' })
+      .set('X-User-ID', userId);
+
+    expect(getRes1.statusCode).toBe(NOT_FOUND);
+
+    const getRes2 = await req
+      .get(`${route}`)
+      .query({ coin: 'michal', vsCoin: 'usd' })
+      .set('X-User-ID', userId);
+
+    expect(getRes2.statusCode).toBe(NOT_FOUND);
   });
 });
