@@ -15,9 +15,3 @@ export class CreateAssetDto {
   @Min(0)
   amount: number;
 }
-
-export class IdDto {
-  @Transform(({ value }) => Number(value))
-  @IsInt()
-  id: number;
-}

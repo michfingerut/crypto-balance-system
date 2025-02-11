@@ -29,6 +29,7 @@ describe('BalanceServiceController (e2e)', () => {
     beforeEach(async () => {
       testUtils.clearFile();
     });
+
     it('authorization', async () => {
       const res = await req.post(route).send({});
       expect(res.statusCode).toBe(UNAUTHORIZED);
@@ -72,6 +73,7 @@ describe('BalanceServiceController (e2e)', () => {
     beforeEach(async () => {
       testUtils.clearFile();
     });
+
     it('authorization', async () => {
       const res = await req.get(route);
       expect(res.statusCode).toBe(UNAUTHORIZED);
@@ -97,7 +99,7 @@ describe('BalanceServiceController (e2e)', () => {
       testUtils.testResponse(getRes, OK, [expectedData], 'id');
     });
 
-    it.skip('.GET user with no assets', async () => {
+    it('.GET user with no assets', async () => {
       const res = await req
         .get(route)
         .set('X-User-ID', testUtils.getRandomUuid());
@@ -203,6 +205,7 @@ describe('BalanceServiceController (e2e)', () => {
     beforeEach(async () => {
       testUtils.clearFile();
     });
+
     it('authorization', async () => {
       const res = await req.delete(`${route}/1`);
       expect(res.statusCode).toBe(UNAUTHORIZED);
@@ -221,37 +224,40 @@ describe('BalanceServiceController (e2e)', () => {
       );
     });
 
-    it.skip('basic .DELETE', async () => {
-      const expectedData = {
+    it('basic .DELETE', async () => {
+      const toSend = {
         coin: 'bitcoin',
         amount: 2,
       };
 
       const postRes = await req
         .post(route)
-        .send(expectedData)
+        .send(toSend)
         .set('X-User-ID', userId);
 
+      const id = postRes.body?.id;
+      const expectedData = { ...toSend, userId: userId, id: id };
+
       testUtils.testResponse(postRes, CREATED, expectedData);
-      const id = postRes.body.id;
 
       const deleteRes = await req
         .delete(`${route}/${id}`)
         .set('X-User-ID', userId);
-      expect(deleteRes.statusCode).toBe(OK);
-      //TODO: testUtils.testResponse(postRes, OK, {});
+
+      testUtils.testResponse(deleteRes, OK, expectedData);
 
       const getRes = await req.get(route).set('X-User-ID', userId);
 
       testUtils.testResponse(getRes, OK, []);
     });
 
-    it.skip('.DELETE on non existing asset', async () => {
+    it('.DELETE on non existing asset', async () => {
       const deleteRes = await req
         .delete(`${route}/10`)
         .set('X-User-ID', userId);
+
       expect(deleteRes.statusCode).toBe(OK);
-      //TODO: testUtils.testResponse(postRes, OK, {});
+      testUtils.testResponse(deleteRes, OK, {});
     });
   });
 });
