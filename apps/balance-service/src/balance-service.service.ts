@@ -1,21 +1,13 @@
-import {
-  HttpStatus,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { promises as fs } from 'fs';
 import * as path from 'path';
-import { CreateAssetDto } from './dto/create-asset.dto';
-import { CBSLogging } from '@app/shared/logging/logging.service';
-import { CBSError } from '@app/shared/error/error.service';
 
-//TODO:
-export interface BalanceEntry {
-  userId: string;
-  coin: string;
-  amount: number;
-  id: number;
-}
+import { CBSError } from '@app/shared/error/error.service';
+import { CBSLogging } from '@app/shared/logging/logging.service';
+
+import { CreateAssetDto } from './dto/create-asset.dto';
+import { type BalanceEntry } from './utils/types';
+
 @Injectable()
 export class BalanceDataService {
   private readonly dataFilePath = path.join(
