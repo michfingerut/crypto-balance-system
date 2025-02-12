@@ -13,7 +13,7 @@ async function bootstrap() {
   // app.useLogger(app.get(CBSLogging));
 
   //TODO: add config
-
+  //TODO: env
   await app.listen(process.env.port ?? 3000);
 }
 bootstrap();
