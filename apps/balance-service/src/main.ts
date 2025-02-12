@@ -1,5 +1,7 @@
 import { NestFactory } from '@nestjs/core';
+
 import { CBSLogging } from '@app/shared/logging/logging.service';
+
 import { BalanceServiceModule } from './balance-service.module';
 
 async function bootstrap() {

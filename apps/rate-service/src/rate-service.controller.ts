@@ -15,8 +15,12 @@ import { GetRateDTO } from './dto/get-rate.dto';
 
 @Controller('rate')
 export class RateServiceController {
-  private readonly logger = new CBSLogging(RateServiceController.name);
-  constructor(private readonly rateService: RateService) {}
+  constructor(
+    private readonly rateService: RateService,
+    private readonly logger: CBSLogging,
+  ) {
+    this.logger.setContext(RateServiceController.name);
+  }
 
   @Get()
   //TODO: consider letting send arrays of coins

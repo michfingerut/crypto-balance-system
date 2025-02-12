@@ -16,8 +16,13 @@ export class RateService {
   //cache for coins id
   private readonly coinListCacheKey = 'coin-gecko-coin-list';
 
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
-    this.errCo = new CBSError(new CBSLogging(RateService.name));
+  constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly logger: CBSLogging,
+  ) {
+    this.logger.setContext(RateService.name);
+
+    this.errCo = new CBSError(this.logger);
   }
 
   async isExist(coin: string) {
