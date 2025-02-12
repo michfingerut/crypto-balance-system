@@ -7,6 +7,7 @@ import {
   NotFoundException,
   Injectable,
 } from '@nestjs/common';
+
 import { CBSLogging } from '../logging/logging.service';
 
 @Injectable()

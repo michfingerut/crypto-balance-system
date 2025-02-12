@@ -1,9 +1,11 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { RateServiceController } from './rate-service.controller';
-import { RateService } from './rate-service.service';
-import { ValidateUserIdMiddleware } from '@app/shared/middleware/middleware.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CacheModule } from '@nestjs/cache-manager';
+
+import { ValidateUserIdMiddleware } from '@app/shared/middleware/middleware.service';
+
+import { RateServiceController } from './rate-service.controller';
+import { RateService } from './rate-service.service';
 
 @Module({
   imports: [

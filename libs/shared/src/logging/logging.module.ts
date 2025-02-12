@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+
 import { CBSLogging } from './logging.service';
 
 @Module({

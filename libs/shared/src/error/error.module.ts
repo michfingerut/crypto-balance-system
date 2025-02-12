@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+
 import { CBSError } from './error.service';
 import { LoggingModule } from '../logging/logging.module';
 

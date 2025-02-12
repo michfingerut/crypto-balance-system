@@ -9,10 +9,12 @@ import {
   Headers,
   ParseIntPipe,
 } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
+
+import { CBSLogging } from '@app/shared/logging/logging.service';
+
 import { BalanceDataService } from './balance-service.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
-import { ValidationPipe } from '@nestjs/common';
-import { CBSLogging } from '@app/shared/logging/logging.service';
 @Controller('balance')
 export class BalanceServiceController {
   private readonly logger = new CBSLogging(BalanceServiceController.name);

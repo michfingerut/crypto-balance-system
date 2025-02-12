@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+
 import { RateServiceModule } from './rate-service.module';
 
 async function bootstrap() {

@@ -1,6 +1,7 @@
 import { Injectable, NestMiddleware, HttpStatus } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { isUUID } from 'class-validator';
+
 import { CBSLogging } from '@app/shared/logging/logging.service';
 import { CBSError } from '@app/shared/error/error.service';
 

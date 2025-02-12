@@ -1,6 +1,8 @@
 import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
+
+//import { CBSLogging } from '@app/shared/logging/logging.service';
+
 import { RateService } from './rate-service.service';
-import { CBSLogging } from '@app/shared/logging/logging.service';
 import { GetRateDTO } from './dto/get-rate.dto';
 
 @Controller('rate')
