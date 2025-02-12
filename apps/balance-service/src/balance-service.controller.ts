@@ -15,6 +15,7 @@ import { CBSLogging } from '@app/shared/logging/logging.service';
 
 import { BalanceDataService } from './balance-service.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
+import { GetCalcDto } from './dto/get-calculation.dto';
 @Controller('balance')
 export class BalanceServiceController {
   private readonly logger = new CBSLogging(BalanceServiceController.name);
@@ -30,11 +31,10 @@ export class BalanceServiceController {
   @Get('total') // /balance/total?coin=
   async getCalculationOfTotalAssets(
     @Headers('X-User-ID') userId: string,
-    @Query('coin') coin: 'USD' | 'EUR' | 'NIS',
+    @Query(ValidationPipe) query: GetCalcDto,
   ) {
+    const { coin } = query;
     //TODO: need to use the rate service API
-    // store existing coin in local cache to validate if exist
-    //TODO: validation
     return 1;
   }
 

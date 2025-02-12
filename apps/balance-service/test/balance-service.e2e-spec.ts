@@ -158,8 +158,7 @@ describe('BalanceServiceController (e2e)', () => {
     });
   });
 
-  describe.skip('.GET /balance/total', () => {
-    //TODO after rate service will be implemented
+  describe('.GET /balance/total', () => {
     it('authorization', async () => {
       const res = await req.get(`${route}/total`);
       expect(res.statusCode).toBe(UNAUTHORIZED);
@@ -171,8 +170,10 @@ describe('BalanceServiceController (e2e)', () => {
     it('.GET /total validation', async () => {
       const invalidQuery = [
         {},
-        //missing params
+        //wrong param
         { role: 'role' },
+        //empty string
+        { coin: '' },
       ];
 
       await Promise.all(
@@ -186,7 +187,7 @@ describe('BalanceServiceController (e2e)', () => {
       );
     });
 
-    it('basic .GET /total', async () => {
+    it.skip('basic .GET /total', async () => {
       const expectedData = {
         coin: 'bitcoin',
         amount: 2,
@@ -207,7 +208,7 @@ describe('BalanceServiceController (e2e)', () => {
       //TODO: testUtils.testResponse(getRes, OK, []);
     });
 
-    it('.GET /total on non existing userId', async () => {
+    it.skip('.GET /total on non existing userId', async () => {
       const res = await req
         .get(`${route}/total`)
         .set('X-User-ID', testUtils.getRandomUuid());

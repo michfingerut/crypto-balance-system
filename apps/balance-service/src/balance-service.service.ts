@@ -31,6 +31,11 @@ export class BalanceDataService {
     return data.filter((entry) => entry.userId === userId);
   }
 
+  async getCalculation(userId: string, vsCoin: string) {
+    //get all assets of user
+    //for each asset check send get rate with vscoin and coin name of the asset to the rate-service and add to sum
+  }
+
   async addAssets(userId: string, data: CreateAssetDto): Promise<BalanceEntry> {
     await this.validateCoinExists(data.coin, userId);
 
@@ -63,6 +68,8 @@ export class BalanceDataService {
     return removedEntry;
   }
 
+  //TODO: file operation should move to shared libs
+
   private async readDataFromFile(): Promise<BalanceEntry[]> {
     try {
       const fileContent = await fs.readFile(this.dataFilePath, 'utf-8');
@@ -72,6 +79,8 @@ export class BalanceDataService {
       return [];
     }
   }
+
+  //TODO: file operation should move to shared libs
 
   private async writeDataToFile(data: BalanceEntry[]): Promise<void> {
     try {
