@@ -18,8 +18,7 @@ import { CreateAssetDto } from './dto/create-asset.dto';
 @Controller('balance')
 export class BalanceServiceController {
   private readonly logger = new CBSLogging(BalanceServiceController.name);
-  private readonly balanceDataService: BalanceDataService =
-    new BalanceDataService(this.logger);
+  constructor(private readonly balanceDataService: BalanceDataService) {}
 
   @Get()
   async getAssetsOfUser(@Headers('X-User-ID') userId: string) {
@@ -44,8 +43,6 @@ export class BalanceServiceController {
     @Headers('X-User-ID') userId: string,
     @Body(ValidationPipe) asstesInfo: CreateAssetDto,
   ) {
-    //TODO: need to validate that the coin is a real coin name
-    // store existing coin in local cache to validate if exist
     const res = await this.balanceDataService.addAssets(userId, asstesInfo);
 
     this.logger.log(`${res.id} was created succssefuly`);

@@ -51,6 +51,7 @@ describe('BalanceServiceController (e2e)', () => {
         { amount: true, coin: 'bit coin' },
         { amount: -1, coin: 'bit coin' },
         { amount: 2, coin: '' },
+        { amount: 5, coin: 'not exist coin' },
 
         //wrong parameters:
         //TODO:{ amount: 2, coin: 'bit coin', michal: true },
@@ -126,7 +127,7 @@ describe('BalanceServiceController (e2e)', () => {
           amount: 2,
         },
         {
-          coin: 'sol',
+          coin: 'Zus',
           amount: 0.5,
         },
       ];
@@ -137,7 +138,7 @@ describe('BalanceServiceController (e2e)', () => {
           amount: 0.5,
         },
         {
-          coin: 'sol',
+          coin: 'Zus',
           amount: 0.5,
         },
       ];
