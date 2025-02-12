@@ -12,7 +12,7 @@ const clearFile = async (dataFilePath: string) => {
 };
 
 const statusCode = {
-  SUCCESS: { OK: 200, CREATED: 201 },
+  SUCCESS: { OK: 200, CREATED: 201, NO_CONTENT: 204 },
   ERROR: {
     BAD_REQUEST: 400,
     UNAUTHORIZED: 401,

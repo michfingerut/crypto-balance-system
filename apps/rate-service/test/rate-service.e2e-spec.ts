@@ -12,7 +12,7 @@ describe('RateServiceController (e2e)', () => {
   const userId = testUtils.getRandomUuid();
 
   //codes
-  const { OK } = testUtils.statusCode.SUCCESS;
+  const { OK, NO_CONTENT } = testUtils.statusCode.SUCCESS;
   const { BAD_REQUEST, UNAUTHORIZED, NOT_FOUND } = testUtils.statusCode.ERROR;
 
   beforeEach(async () => {
@@ -78,5 +78,19 @@ describe('RateServiceController (e2e)', () => {
       .set('X-User-ID', userId);
 
     expect(getRes2.statusCode).toBe(NOT_FOUND);
+  });
+
+  it('basic .GET is exist', async () => {
+    const getResExist = await req
+      .get(`${route}/bitcoin`)
+      .set('X-User-ID', userId);
+
+    expect(getResExist.statusCode).toBe(NO_CONTENT);
+
+    const getResNoExist = await req
+      .get(`${route}/michal`)
+      .set('X-User-ID', userId);
+
+    expect(getResNoExist.statusCode).toBe(NOT_FOUND);
   });
 });

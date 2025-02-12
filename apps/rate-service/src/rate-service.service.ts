@@ -20,6 +20,10 @@ export class RateService {
     this.errCo = new CBSError(new CBSLogging(RateService.name));
   }
 
+  async isExist(coin: string) {
+    return await this.getCoinId(coin);
+  }
+
   async getRate(coin: string, vsCoin: string) {
     let rates = [];
     const coinId = await this.getCoinId(coin);

@@ -1,4 +1,12 @@
-import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Query,
+  ValidationPipe,
+} from '@nestjs/common';
 
 import { CBSLogging } from '@app/shared/logging/logging.service';
 
@@ -17,5 +25,13 @@ export class RateServiceController {
     const res = this.rateService.getRate(coin, vs_coin);
     this.logger.log(`get rate ${coin}-${vs_coin}`);
     return res;
+  }
+
+  //TODO: add validation
+  @Get(':coin')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async getExist(@Param('coin') coin: string) {
+    await this.rateService.isExist(coin);
+    this.logger.log(`get exist ${coin}`);
   }
 }
