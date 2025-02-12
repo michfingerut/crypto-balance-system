@@ -159,6 +159,10 @@ describe('BalanceServiceController (e2e)', () => {
   });
 
   describe('.GET /balance/total', () => {
+    beforeEach(async () => {
+      testUtils.clearFile(dataFilePath);
+    });
+
     it('authorization', async () => {
       const res = await req.get(`${route}/total`);
       expect(res.statusCode).toBe(UNAUTHORIZED);
@@ -167,14 +171,13 @@ describe('BalanceServiceController (e2e)', () => {
       expect(res2.statusCode).toBe(UNAUTHORIZED);
     });
 
-    it.skip('.GET /total validation', async () => {
+    it('.GET /total validation', async () => {
       const invalidQuery = [
         {},
         //wrong param
         { role: 'role' },
         //empty string
         { coin: '' },
-        { coin: 'michall' }, //not existing coin
       ];
 
       await Promise.all(
@@ -188,7 +191,7 @@ describe('BalanceServiceController (e2e)', () => {
       );
     });
 
-    it.skip('basic .GET /total', async () => {
+    it('basic .GET /total', async () => {
       const toSend = {
         coin: 'bitcoin',
         amount: 2,
@@ -211,7 +214,29 @@ describe('BalanceServiceController (e2e)', () => {
       expect(getRes.body.value).toBeDefined();
     });
 
-    it.skip('.GET /total with no assets', async () => {
+    it('.GET /total not existing coin', async () => {
+      const toSend = {
+        coin: 'bitcoin',
+        amount: 2,
+      };
+
+      const postRes = await req
+        .post(route)
+        .send(toSend)
+        .set('X-User-ID', userId);
+
+      const expectedData = { ...toSend, userId: userId, id: postRes.body.id };
+      testUtils.testResponse(postRes, CREATED, expectedData);
+
+      const getRes = await req
+        .get(`${route}/total`)
+        .query({ coin: 'michal' })
+        .set('X-User-ID', userId);
+
+      expect(getRes.statusCode).toBe(BAD_REQUEST);
+    });
+
+    it('.GET /total with no assets', async () => {
       const res = await req
         .get(`${route}/total`)
         .query({ coin: 'usd' })

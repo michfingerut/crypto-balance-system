@@ -34,8 +34,11 @@ export class BalanceServiceController {
     @Query(ValidationPipe) query: GetCalcDto,
   ) {
     const { coin } = query;
-    //TODO: need to use the rate service API
-    return 1;
+    const res = await this.balanceDataService.getCalculation(userId, coin);
+
+    this.logger.log(`Get calculation of ${userId} assets`);
+
+    return res;
   }
 
   @Post()

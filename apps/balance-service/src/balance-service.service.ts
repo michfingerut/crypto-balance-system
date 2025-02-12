@@ -22,7 +22,7 @@ export class BalanceDataService {
   );
   private errCo = new CBSError(new CBSLogging(BalanceServiceController.name));
   //TODO:env
-  private readonly rateServiceUrl = 'http://localhost:3000/rate'; // Adjust if needed
+  private readonly rateServiceUrl = 'http://localhost:3000/rate';
 
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
@@ -32,8 +32,37 @@ export class BalanceDataService {
   }
 
   async getCalculation(userId: string, vsCoin: string) {
-    //get all assets of user
-    //for each asset check send get rate with vscoin and coin name of the asset to the rate-service and add to sum
+    const ratesMap = new Map<string, number>();
+    try {
+      const assets = await this.getAssets(userId);
+      let value = 0;
+
+      for (const asset of assets) {
+        const { coin } = asset;
+        let rate = ratesMap.get(coin);
+
+        if (rate === undefined) {
+          const res = (
+            await axios.get(
+              `${this.rateServiceUrl}?coin=${coin}&vs_coin=${vsCoin}`,
+              {
+                headers: {
+                  'X-User-ID': userId,
+                },
+              },
+            )
+          ).data;
+          rate = res[coin][vsCoin];
+          ratesMap.set(coin, rate!); //if rate doesnt exist, rate-service throws exception
+        }
+
+        value += rate! * asset.amount;
+      }
+
+      return { value };
+    } catch (err) {
+      this.errCo.errHandler('Coin doesnt exist', HttpStatus.BAD_REQUEST);
+    }
   }
 
   async addAssets(userId: string, data: CreateAssetDto): Promise<BalanceEntry> {
