@@ -18,7 +18,7 @@ export class CBSError {
   }
 
   errHandler(message: string, code?: number) {
-    this.logger.error(message);
+    this.logger.error(` ${code} : ${message}`);
     switch (code) {
       case HttpStatus.BAD_REQUEST:
         throw new BadRequestException(message);
