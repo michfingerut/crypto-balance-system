@@ -20,11 +20,17 @@ export class BalanceDataService {
     'data',
     'balanceData.json',
   );
-  private errCo = new CBSError(new CBSLogging(BalanceServiceController.name));
+  private errCo: CBSError;
   //TODO:env
   private readonly rateServiceUrl = 'http://localhost:3000/rate';
 
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
+  constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly logger: CBSLogging,
+  ) {
+    this.logger.setContext(BalanceServiceController.name);
+    this.errCo = new CBSError(this.logger);
+  }
 
   async getAssets(userId: string): Promise<BalanceEntry[]> {
     const data = await this.readDataFromFile();

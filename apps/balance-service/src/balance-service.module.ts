@@ -22,6 +22,8 @@ import { BalanceDataService } from './balance-service.service';
 })
 export class BalanceServiceModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ValidateUserIdMiddleware).forRoutes('*');
+    consumer
+      .apply(ValidateUserIdMiddleware)
+      .forRoutes(BalanceServiceController);
   }
 }

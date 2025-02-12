@@ -20,6 +20,6 @@ import { RateService } from './rate-service.service';
 })
 export class RateServiceModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ValidateUserIdMiddleware).forRoutes('*');
+    consumer.apply(ValidateUserIdMiddleware).forRoutes(RateServiceController);
   }
 }

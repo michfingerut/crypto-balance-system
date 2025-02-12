@@ -16,10 +16,15 @@ import { CBSLogging } from '@app/shared/logging/logging.service';
 import { BalanceDataService } from './balance-service.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { GetCalcDto } from './dto/get-calculation.dto';
+
 @Controller('balance')
 export class BalanceServiceController {
-  private readonly logger = new CBSLogging(BalanceServiceController.name);
-  constructor(private readonly balanceDataService: BalanceDataService) {}
+  constructor(
+    private readonly balanceDataService: BalanceDataService,
+    private readonly logger: CBSLogging,
+  ) {
+    this.logger.setContext(BalanceDataService.name);
+  }
 
   @Get()
   async getAssetsOfUser(@Headers('X-User-ID') userId: string) {

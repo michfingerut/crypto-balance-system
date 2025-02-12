@@ -1,19 +1,18 @@
 import { NestFactory } from '@nestjs/core';
-
-//import { CBSLogging } from '@app/shared/logging/logging.controller';
-
+import { CBSLogging } from '@app/shared/logging/logging.service';
 import { BalanceServiceModule } from './balance-service.module';
 
 async function bootstrap() {
-  //TODO: the file should be generated here if not exist
-  const app = await NestFactory.create(BalanceServiceModule);
-  // , {
-  //   bufferLogs: true,
-  // });
-  // app.useLogger(app.get(CBSLogging));
+  const app = await NestFactory.create(BalanceServiceModule, {
+    bufferLogs: true,
+    logger: false,
+  });
 
-  //TODO: add config
-  //TODO: env
+  // Set up ONLY our custom logger
+  app.useLogger(new CBSLogging());
+
+  //TODO: config + env
+
   await app.listen(process.env.port ?? 3000);
 }
 bootstrap();
