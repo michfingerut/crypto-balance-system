@@ -53,27 +53,28 @@ describe('RateServiceController (e2e)', () => {
     );
   });
 
-  it.skip('basic .GET rate', async () => {
+  it('basic .GET rate', async () => {
+    const coin = 'bitcoin';
     const getRes = await req
       .get(`${route}`)
-      .query({ coin: 'bitcoin' })
+      .query({ coin: coin, vs_coin: 'usd' })
       .set('X-User-ID', userId);
 
     expect(getRes.statusCode).toBe(OK);
-    expect(getRes.body.calc).toBeDefined();
+    expect(getRes.body[coin]).toBeDefined();
   });
 
   it('.GET on non existing coin', async () => {
     const getRes1 = await req
       .get(`${route}`)
-      .query({ coin: 'bitcoin', vsCoin: 'michal' })
+      .query({ coin: 'bitcoin', vs_coin: 'michal' })
       .set('X-User-ID', userId);
 
     expect(getRes1.statusCode).toBe(NOT_FOUND);
 
     const getRes2 = await req
       .get(`${route}`)
-      .query({ coin: 'michal', vsCoin: 'usd' })
+      .query({ coin: 'michal', vs_coin: 'usd' })
       .set('X-User-ID', userId);
 
     expect(getRes2.statusCode).toBe(NOT_FOUND);
