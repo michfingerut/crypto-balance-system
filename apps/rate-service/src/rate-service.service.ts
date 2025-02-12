@@ -1,7 +1,7 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import axios from 'axios';
 import { Cache } from 'cache-manager';
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import { CBSError } from '@app/shared/error/error.service';
 import { CBSLogging } from '@app/shared/logging/logging.service';
@@ -48,11 +48,11 @@ export class RateService {
       rates = response.data;
       await this.cacheManager.set(cacheKey, rates);
     } catch (error) {
-      this.errCo.errHandler('Not found coins', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Not found coins');
     }
 
     if (!rates[coinId][vsCoin]) {
-      this.errCo.errHandler('Not found vs-coins', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Not found vs-coins');
     }
 
     return rates;
@@ -86,7 +86,7 @@ export class RateService {
     );
 
     if (!coinData) {
-      this.errCo.errHandler('coin not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Not found coins');
     }
 
     return coinData!.id;

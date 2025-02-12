@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Param,
   Query,
+  UseFilters,
   ValidationPipe,
 } from '@nestjs/common';
 
@@ -12,8 +13,10 @@ import { CBSLogging } from '@app/shared/logging/logging.service';
 
 import { RateService } from './rate-service.service';
 import { GetRateDTO } from './dto/get-rate.dto';
+import { CBSError } from '@app/shared/error/error.service';
 
 @Controller('rate')
+@UseFilters(CBSError)
 export class RateServiceController {
   constructor(
     private readonly rateService: RateService,

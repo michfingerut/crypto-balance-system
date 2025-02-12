@@ -1,4 +1,10 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import axios from 'axios';
 import { Cache } from 'cache-manager';
@@ -6,11 +12,9 @@ import { promises as fs } from 'fs';
 import * as path from 'path';
 
 import { CBSError } from '@app/shared/error/error.service';
-import { CBSLogging } from '@app/shared/logging/logging.service';
 
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { type BalanceEntry } from './utils/types';
-import { BalanceServiceController } from './balance-service.controller';
 
 @Injectable()
 export class BalanceDataService {
@@ -24,13 +28,7 @@ export class BalanceDataService {
   //TODO:env
   private readonly rateServiceUrl = 'http://localhost:3000/rate';
 
-  constructor(
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    private readonly logger: CBSLogging,
-  ) {
-    this.logger.setContext(BalanceServiceController.name);
-    this.errCo = new CBSError(this.logger);
-  }
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   async getAssets(userId: string): Promise<BalanceEntry[]> {
     const data = await this.readDataFromFile();
@@ -67,7 +65,7 @@ export class BalanceDataService {
 
       return { value };
     } catch (err) {
-      this.errCo.errHandler('Coin doesnt exist', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException('Coin doesnt exist');
     }
   }
 
@@ -95,7 +93,7 @@ export class BalanceDataService {
     }
 
     if (balanceEntries[index].userId !== userId) {
-      this.errCo.errHandler('Cant remove the asset', HttpStatus.FORBIDDEN);
+      throw new ForbiddenException('Cant remove the asset');
     }
 
     const [removedEntry] = balanceEntries.splice(index, 1);
@@ -110,7 +108,9 @@ export class BalanceDataService {
       const fileContent = await fs.readFile(this.dataFilePath, 'utf-8');
       return JSON.parse(fileContent);
     } catch (error) {
-      this.errCo.errHandler(`Error reading from file:${error}`);
+      throw new InternalServerErrorException(
+        `Error reading from file:${error}`,
+      );
       return [];
     }
   }
@@ -125,7 +125,9 @@ export class BalanceDataService {
         'utf-8',
       );
     } catch (error) {
-      this.errCo.errHandler(`Error reading from file:${error}`);
+      throw new InternalServerErrorException(
+        `Error reading from file:${error}`,
+      );
     }
   }
 
@@ -148,7 +150,7 @@ export class BalanceDataService {
       await this.cacheManager.set(cacheKey, true);
       return;
     } catch (error) {
-      this.errCo.errHandler('Coin doesnt exist', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException('Coin doesnt exist');
     }
   }
 }

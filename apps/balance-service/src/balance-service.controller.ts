@@ -8,6 +8,7 @@ import {
   Query,
   Headers,
   ParseIntPipe,
+  UseFilters,
 } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
 
@@ -16,8 +17,10 @@ import { CBSLogging } from '@app/shared/logging/logging.service';
 import { BalanceDataService } from './balance-service.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { GetCalcDto } from './dto/get-calculation.dto';
+import { CBSError } from '@app/shared/error/error.service';
 
 @Controller('balance')
+@UseFilters(CBSError)
 export class BalanceServiceController {
   constructor(
     private readonly balanceDataService: BalanceDataService,

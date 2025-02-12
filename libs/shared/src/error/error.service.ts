@@ -1,36 +1,32 @@
 import {
-  BadRequestException,
-  ForbiddenException,
-  InternalServerErrorException,
-  UnauthorizedException,
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  HttpException,
   HttpStatus,
-  NotFoundException,
-  Injectable,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 
 import { CBSLogging } from '../logging/logging.service';
 
-@Injectable()
-export class CBSError {
-  private logger: CBSLogging;
+@Catch(HttpException)
+export class CBSError implements ExceptionFilter {
+  constructor(private readonly logger: CBSLogging) {}
+  catch(exception: HttpException, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
+    const status = exception.getStatus() || HttpStatus.INTERNAL_SERVER_ERROR;
+    const message =
+      (exception.getResponse() as any).message || 'Internal serveer error';
 
-  constructor(logger: CBSLogging) {
-    this.logger = logger;
-  }
+    this.logger.error(` ${status} : ${message}`);
 
-  errHandler(message: string, code?: number) {
-    this.logger.error(` ${code} : ${message}`);
-    switch (code) {
-      case HttpStatus.BAD_REQUEST:
-        throw new BadRequestException(message);
-      case HttpStatus.UNAUTHORIZED:
-        throw new UnauthorizedException(message);
-      case HttpStatus.FORBIDDEN:
-        throw new ForbiddenException(message);
-      case HttpStatus.NOT_FOUND:
-        throw new NotFoundException(message);
-      default:
-        throw new InternalServerErrorException('internal error');
-    }
+    response.status(status).json({
+      statusCode: status,
+      message: message,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+    });
   }
 }
