@@ -8,10 +8,9 @@ import {
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import axios from 'axios';
 import { Cache } from 'cache-manager';
-import { promises as fs } from 'fs';
 import * as path from 'path';
 
-import { CBSError } from '@app/shared/error/error.service';
+import { CBSFileOpService } from '@app/shared/file-op/file-op.service';
 
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { type BalanceEntry } from './utils/types';
@@ -24,14 +23,16 @@ export class BalanceDataService {
     'data',
     'balanceData.json',
   );
-  private errCo: CBSError;
   //TODO:env
   private readonly rateServiceUrl = 'http://localhost:3000/rate';
 
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
+  constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly fileOp: CBSFileOpService<BalanceEntry>,
+  ) {}
 
   async getAssets(userId: string): Promise<BalanceEntry[]> {
-    const data = await this.readDataFromFile();
+    const data = await this.fileOp.readDataFromFile(this.dataFilePath);
     return data.filter((entry) => entry.userId === userId);
   }
 
@@ -73,20 +74,24 @@ export class BalanceDataService {
     await this.validateCoinExists(data.coin, userId);
 
     //Generate ID for the assset
-    const balanceEntries = await this.readDataFromFile();
+    const balanceEntries = await this.fileOp.readDataFromFile(
+      this.dataFilePath,
+    );
     const newId = balanceEntries.length + 1;
 
     const newEntry: BalanceEntry = { ...data, userId, id: newId };
     balanceEntries.push(newEntry);
 
-    await this.writeDataToFile(balanceEntries);
+    await this.fileOp.writeDataToFile(balanceEntries, this.dataFilePath);
 
     return newEntry;
   }
 
   async removeAssets(id: number, userId: string): Promise<BalanceEntry | {}> {
     //check if user exist in the file
-    const balanceEntries = await this.readDataFromFile();
+    const balanceEntries = await this.fileOp.readDataFromFile(
+      this.dataFilePath,
+    );
     const index = balanceEntries.findIndex((entry) => entry.id === id);
     if (index === -1) {
       //if not exist, return 200 and empty object
@@ -98,38 +103,8 @@ export class BalanceDataService {
     }
 
     const [removedEntry] = balanceEntries.splice(index, 1);
-    await this.writeDataToFile(balanceEntries);
+    await this.fileOp.writeDataToFile(balanceEntries, this.dataFilePath);
     return removedEntry;
-  }
-
-  //TODO: file operation should move to shared libs
-
-  private async readDataFromFile(): Promise<BalanceEntry[]> {
-    try {
-      const fileContent = await fs.readFile(this.dataFilePath, 'utf-8');
-      return JSON.parse(fileContent);
-    } catch (error) {
-      throw new InternalServerErrorException(
-        `Error reading from file:${error}`,
-      );
-      return [];
-    }
-  }
-
-  //TODO: file operation should move to shared libs
-
-  private async writeDataToFile(data: BalanceEntry[]): Promise<void> {
-    try {
-      await fs.writeFile(
-        this.dataFilePath,
-        JSON.stringify(data, null, 2),
-        'utf-8',
-      );
-    } catch (error) {
-      throw new InternalServerErrorException(
-        `Error reading from file:${error}`,
-      );
-    }
   }
 
   private async validateCoinExists(
