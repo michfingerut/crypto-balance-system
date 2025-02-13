@@ -163,11 +163,11 @@ export class BalanceDataService {
     }
 
     // in that point of the code, the coinList is defined
-    const isExist = coinList!.find((data) => {
-      return data.name === coin;
-    });
+    const coinData = coinList!.find(
+      (c) => c.name.toLowerCase() === coin.toLowerCase(),
+    );
 
-    if (!isExist) {
+    if (!coinData) {
       throw new BadRequestException('Coin doesn’t exist');
     }
 
