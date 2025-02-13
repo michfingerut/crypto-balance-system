@@ -32,6 +32,7 @@
     "cache-manager": "^6.4.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "dotenv": "^16.4.7",
     "fs": "^0.0.1-security",
     "keyv": "^5.2.3",
     "reflect-metadata": "^0.2.2",

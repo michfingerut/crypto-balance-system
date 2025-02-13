@@ -12,9 +12,10 @@ import { RateService } from './rate-service.service';
   imports: [
     LoggingModule,
     ScheduleModule.forRoot(),
+
     CacheModule.register({
       store: 'memory',
-      ttl: 600,
+      ttl: 0, //prevent automatic exp, will be updated according to user demend
     }),
   ],
   controllers: [RateServiceController],
