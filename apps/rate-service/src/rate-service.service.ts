@@ -21,10 +21,6 @@ export class RateService {
     this.logger.setContext(RateService.name);
   }
 
-  async isExist(coin: string) {
-    return await this.getCoinId(coin);
-  }
-
   async getRate(coin: string, vsCoin: string) {
     let rates = [];
     const coinId = await this.getCoinId(coin);
@@ -42,7 +38,6 @@ export class RateService {
       });
 
       rates = response.data;
-      await this.cacheManager.set(cacheKey, rates);
     } catch (error) {
       throw new NotFoundException('Not found coins');
     }
@@ -50,6 +45,8 @@ export class RateService {
     if (!rates[coinId][vsCoin]) {
       throw new NotFoundException('Not found vs-coins');
     }
+
+    await this.cacheManager.set(cacheKey, rates[coinId], 600);
 
     return rates;
   }
@@ -76,9 +73,7 @@ export class RateService {
     const coinList = await this.getCoinList();
 
     const coinData = coinList.find(
-      (c) =>
-        c.name.toLowerCase() === coin.toLowerCase() ||
-        c.id.toLowerCase() === coin.toLowerCase(),
+      (c) => c.name.toLowerCase() === coin.toLowerCase(),
     );
 
     if (!coinData) {

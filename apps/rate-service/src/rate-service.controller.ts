@@ -26,7 +26,6 @@ export class RateServiceController {
   }
 
   @Get()
-  //TODO: consider letting send arrays of coins
   async getRate(@Query(ValidationPipe) query: GetRateDTO) {
     const { coin, vs_coin } = query;
 
