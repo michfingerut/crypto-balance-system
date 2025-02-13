@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  balance-service:
+    build:
+      context: .
+      dockerfile: ./apps/balance-service/Dockerfile
+    container_name: balance-service
+    ports:
+      - "${BALANCE_SERVER_PORT}:${BALANCE_SERVER_PORT}"
+    environment:
+      - NODE_ENV=development
+      - SERVER_PORT=${BALANCE_SERVER_PORT}
+    volumes:
+      - ./apps/balance-service:/usr/src/app 
+      - ./libs/shared:/usr/src/app/libs/shared 
+      - ./apps/balance-service/data:/usr/src/app/dist/apps/data  
+    networks:
+      - crypto-network
+    env_file:
+      - ./.env
+
+  rate-service:
+    build:
+      context: .
+      dockerfile: ./apps/rate-service/Dockerfile
+    container_name: rate-service
+    ports:
+      - "${RATE_SERVER_PORT}:${RATE_SERVER_PORT}"
+    environment:
+      - NODE_ENV=development 
+      - SERVER_PORT=${RATE_SERVER_PORT}
+      - RATE_REFRESH_INTERVAL=${RATE_REFRESH_INTERVAL}
+    volumes:
+      - ./apps/rate-service:/usr/src/app  
+      - ./libs/shared:/usr/src/app/libs/shared  
+    networks:
+      - crypto-network
+    env_file:
+      - ./.env
+
+networks:
+  crypto-network:
+    driver: bridge
