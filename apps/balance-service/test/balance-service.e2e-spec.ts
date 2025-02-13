@@ -195,8 +195,7 @@ describe('BalanceServiceController (e2e)', () => {
       );
     });
 
-    it.only('basic .GET /total', async () => {
-      //TODO: failing 404 coin not found from rate-service
+    it('basic .GET /total', async () => {
       const toSend = {
         coin: 'bitcoin',
         amount: 2,

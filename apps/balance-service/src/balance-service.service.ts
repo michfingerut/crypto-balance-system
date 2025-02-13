@@ -57,7 +57,9 @@ export class BalanceDataService {
               },
             )
           ).data;
-          rate = res[coin][vsCoin];
+
+          rate = res[vsCoin];
+
           ratesMap.set(coin, rate!); //if rate doesnt exist, rate-service throws exception
         }
 
