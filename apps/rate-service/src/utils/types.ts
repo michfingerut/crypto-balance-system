@@ -6,6 +6,7 @@ type CoinEntry = {
 
 type RateEnv = {
   rateRefreshInterval: number;
+  serverPort: number;
 };
 
 export { type CoinEntry, type RateEnv };

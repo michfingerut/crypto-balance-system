@@ -1,19 +1,16 @@
 import * as dotenv from 'dotenv';
 
-import { RateEnv } from '../utils/types';
+import { BalanceEnv } from '../utils/types';
 
 class ConfigUtils {
   private static instance: ConfigUtils;
-  private env: RateEnv;
+  private env: BalanceEnv;
 
   private constructor() {
     dotenv.config({ path: './apps/rate-service/.env' });
 
     this.env = {
-      rateRefreshInterval: parseInt(
-        process.env.RATE_REFRESH_INTERVAL || '600000',
-      ),
-      serverPort: parseInt(process.env.SERVER_PORT || '3002'),
+      serverPort: parseInt(process.env.SERVER_PORT || '3001'),
     };
   }
 

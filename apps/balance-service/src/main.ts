@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { CBSLogging } from '@app/shared/logging/logging.service';
 
 import { BalanceServiceModule } from './balance-service.module';
+import { ConfigUtils } from './config/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(BalanceServiceModule, {
@@ -14,7 +15,8 @@ async function bootstrap() {
   app.useLogger(new CBSLogging());
 
   //TODO: config + env
+  const config = ConfigUtils.getInstance();
 
-  await app.listen(process.env.port ?? 3000);
+  await app.listen(config.get('SERVER_PORT'));
 }
 bootstrap();
