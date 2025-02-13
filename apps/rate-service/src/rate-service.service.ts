@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Cache } from 'cache-manager';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
-import { CBSError } from '@app/shared/error/error.service';
 import { CBSLogging } from '@app/shared/logging/logging.service';
 
 import { type CoinEntry } from './utils/types';
@@ -12,7 +11,6 @@ import { type CoinEntry } from './utils/types';
 export class RateService {
   private readonly coinGeckoUrl = 'https://api.coingecko.com/api/v3';
 
-  private errCo: CBSError;
   //cache for coins id
   private readonly coinListCacheKey = 'coin-gecko-coin-list';
 
@@ -21,8 +19,6 @@ export class RateService {
     private readonly logger: CBSLogging,
   ) {
     this.logger.setContext(RateService.name);
-
-    this.errCo = new CBSError(this.logger);
   }
 
   async isExist(coin: string) {
