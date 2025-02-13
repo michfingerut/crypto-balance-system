@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { BalanceServiceController } from './balance-service.controller';
 import { BalanceDataService } from './balance-service.service';
-import { CBSLogging } from '@app/shared/logging/logging.service';
+import { mockModules } from '../../../testUtils/index';
 
 describe('RateServiceController', () => {
   let balanceServiceController: BalanceServiceController;
@@ -11,10 +12,9 @@ describe('RateServiceController', () => {
       controllers: [BalanceServiceController],
       providers: [
         BalanceDataService,
-        {
-          provide: CBSLogging,
-          useValue: { log: jest.fn() },
-        },
+        mockModules.mockCacheManager,
+        mockModules.mockFileOp,
+        mockModules.mockLogger,
       ],
     }).compile();
 

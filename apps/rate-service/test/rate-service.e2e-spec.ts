@@ -1,20 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { RateServiceModule } from '../src/rate-service.module';
-import testUtils from '../../../testUtils/index';
 import TestAgent from 'supertest/lib/agent';
+
+import { RateServiceModule } from '../src/rate-service.module';
+import { getRandomUuid, statusCode } from '../../../testUtils/index';
 
 //TODO: make mock to the api call to coin-geko due to rate limit
 describe('RateServiceController (e2e)', () => {
   let app: INestApplication;
   let req: TestAgent;
   const route: string = '/rate';
-  const userId = testUtils.getRandomUuid();
+  const userId = getRandomUuid();
 
   //codes
-  const { OK, NO_CONTENT } = testUtils.statusCode.SUCCESS;
-  const { BAD_REQUEST, UNAUTHORIZED, NOT_FOUND } = testUtils.statusCode.ERROR;
+  const { OK } = statusCode.SUCCESS;
+  const { BAD_REQUEST, UNAUTHORIZED, NOT_FOUND } = statusCode.ERROR;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({

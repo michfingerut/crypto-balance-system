@@ -2,6 +2,8 @@ import * as _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
 
+import { mockModules } from './mockData';
+
 const clearFile = async (dataFilePath: string) => {
   try {
     // Clear the JSON file after each test
@@ -53,10 +55,11 @@ const testResponse = (
   }
 };
 
-export default {
+export {
   clearFile,
   statusCode,
   getRandomUuid,
   compareData,
   testResponse,
+  mockModules,
 };

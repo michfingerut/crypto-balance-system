@@ -1,21 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
-import { BalanceServiceModule } from '../src/balance-service.module';
-import TestAgent from 'supertest/lib/agent';
-import testUtils from '../../../testUtils/index';
 import * as path from 'path';
+import * as request from 'supertest';
+import TestAgent from 'supertest/lib/agent';
+
+import { BalanceServiceModule } from '../src/balance-service.module';
+import {
+  clearFile,
+  getRandomUuid,
+  statusCode,
+  testResponse,
+} from '../../../testUtils/index';
 
 describe('BalanceServiceController (e2e)', () => {
   let app: INestApplication;
   let req: TestAgent;
   const route: string = '/balance';
-  const userId = testUtils.getRandomUuid();
+  const userId = getRandomUuid();
   const dataFilePath = path.join(__dirname, '..', 'data', 'balanceData.json');
 
   //codes
-  const { OK, CREATED } = testUtils.statusCode.SUCCESS;
-  const { BAD_REQUEST, UNAUTHORIZED, FORBIDDEN } = testUtils.statusCode.ERROR;
+  const { OK, CREATED } = statusCode.SUCCESS;
+  const { BAD_REQUEST, UNAUTHORIZED, FORBIDDEN } = statusCode.ERROR;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -29,7 +35,7 @@ describe('BalanceServiceController (e2e)', () => {
 
   describe('.POST /balance', () => {
     beforeEach(async () => {
-      testUtils.clearFile(dataFilePath);
+      clearFile(dataFilePath);
     });
 
     it('authorization', async () => {
@@ -74,13 +80,13 @@ describe('BalanceServiceController (e2e)', () => {
       expect(res.body.id).toBeDefined();
 
       const expectedData = { ...toSend, userId: userId, id: res.body.id };
-      testUtils.testResponse(res, CREATED, expectedData);
+      testResponse(res, CREATED, expectedData);
     });
   });
 
   describe('.GET /balance', () => {
     beforeEach(async () => {
-      testUtils.clearFile(dataFilePath);
+      clearFile(dataFilePath);
     });
 
     it('authorization', async () => {
@@ -104,19 +110,17 @@ describe('BalanceServiceController (e2e)', () => {
 
       const expectedData = { ...toSend, userId: userId, id: postRes.body.id };
 
-      testUtils.testResponse(postRes, CREATED, expectedData);
+      testResponse(postRes, CREATED, expectedData);
 
       const getRes = await req.get(route).set('X-User-ID', userId);
 
-      testUtils.testResponse(getRes, OK, [expectedData], 'id');
+      testResponse(getRes, OK, [expectedData], 'id');
     });
 
     it('.GET user with no assets', async () => {
-      const res = await req
-        .get(route)
-        .set('X-User-ID', testUtils.getRandomUuid());
+      const res = await req.get(route).set('X-User-ID', getRandomUuid());
 
-      testUtils.testResponse(res, OK, []);
+      testResponse(res, OK, []);
     });
 
     it('complex .GET', async () => {
@@ -142,7 +146,7 @@ describe('BalanceServiceController (e2e)', () => {
           amount: 0.5,
         },
       ];
-      const user2UUID = testUtils.getRandomUuid();
+      const user2UUID = getRandomUuid();
 
       for (const body of user1ToSend) {
         const res = await req.post(route).send(body).set('X-User-ID', userId);
@@ -154,13 +158,13 @@ describe('BalanceServiceController (e2e)', () => {
       }
 
       const getRes = await req.get(route).set('X-User-ID', userId);
-      testUtils.testResponse(getRes, OK, expectedData, 'id');
+      testResponse(getRes, OK, expectedData, 'id');
     });
   });
 
   describe('.GET /balance/total', () => {
     beforeEach(async () => {
-      testUtils.clearFile(dataFilePath);
+      clearFile(dataFilePath);
     });
 
     it('authorization', async () => {
@@ -203,7 +207,7 @@ describe('BalanceServiceController (e2e)', () => {
         .set('X-User-ID', userId);
 
       const expectedData = { ...toSend, userId: userId, id: postRes.body.id };
-      testUtils.testResponse(postRes, CREATED, expectedData);
+      testResponse(postRes, CREATED, expectedData);
 
       const getRes = await req
         .get(`${route}/total`)
@@ -226,7 +230,7 @@ describe('BalanceServiceController (e2e)', () => {
         .set('X-User-ID', userId);
 
       const expectedData = { ...toSend, userId: userId, id: postRes.body.id };
-      testUtils.testResponse(postRes, CREATED, expectedData);
+      testResponse(postRes, CREATED, expectedData);
 
       const getRes = await req
         .get(`${route}/total`)
@@ -242,13 +246,13 @@ describe('BalanceServiceController (e2e)', () => {
         .query({ coin: 'usd' })
         .set('X-User-ID', userId);
 
-      testUtils.testResponse(res, OK, { value: 0 });
+      testResponse(res, OK, { value: 0 });
     });
   });
 
   describe('.DELETE /balance', () => {
     beforeEach(async () => {
-      testUtils.clearFile(dataFilePath);
+      clearFile(dataFilePath);
     });
 
     it('authorization', async () => {
@@ -286,17 +290,17 @@ describe('BalanceServiceController (e2e)', () => {
       const id = postRes.body?.id;
       const expectedData = { ...toSend, userId: userId, id: id };
 
-      testUtils.testResponse(postRes, CREATED, expectedData);
+      testResponse(postRes, CREATED, expectedData);
 
       const deleteRes = await req
         .delete(`${route}/${id}`)
         .set('X-User-ID', userId);
 
-      testUtils.testResponse(deleteRes, OK, expectedData);
+      testResponse(deleteRes, OK, expectedData);
 
       const getRes = await req.get(route).set('X-User-ID', userId);
 
-      testUtils.testResponse(getRes, OK, []);
+      testResponse(getRes, OK, []);
     });
 
     it('.DELETE on non existing asset', async () => {
@@ -305,7 +309,7 @@ describe('BalanceServiceController (e2e)', () => {
         .set('X-User-ID', userId);
 
       expect(deleteRes.statusCode).toBe(OK);
-      testUtils.testResponse(deleteRes, OK, {});
+      testResponse(deleteRes, OK, {});
     });
 
     it('.DELETE other user asset', async () => {
@@ -322,11 +326,11 @@ describe('BalanceServiceController (e2e)', () => {
       const id = postRes.body?.id;
       const expectedData = { ...toSend, userId: userId, id: id };
 
-      testUtils.testResponse(postRes, CREATED, expectedData);
+      testResponse(postRes, CREATED, expectedData);
 
       const deleteRes = await req
         .delete(`${route}/${id}`)
-        .set('X-User-ID', testUtils.getRandomUuid());
+        .set('X-User-ID', getRandomUuid());
 
       expect(deleteRes.statusCode).toBe(FORBIDDEN);
     });
