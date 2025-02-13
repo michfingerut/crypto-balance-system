@@ -80,6 +80,7 @@ export class BalanceDataService {
     balanceEntries.push(newEntry);
 
     await this.writeDataToFile(balanceEntries);
+
     return newEntry;
   }
 
@@ -136,21 +137,40 @@ export class BalanceDataService {
     userId: string,
   ): Promise<void> {
     const cacheKey = `coin-exists-${coin}`;
+    const coinListCacheKey = 'coin-list';
 
+    // Check if the specific coin is cached
     const cachedExists = await this.cacheManager.get<boolean>(cacheKey);
     if (cachedExists) return;
 
-    try {
-      await axios.get(`${this.rateServiceUrl}/${coin}`, {
-        headers: {
-          'X-User-ID': userId,
-        },
-      });
+    // Check if the full coin list is cached
+    let coinList =
+      await this.cacheManager.get<
+        { id: string; name: string; symbol: string }[]
+      >(coinListCacheKey);
 
-      await this.cacheManager.set(cacheKey, true);
-      return;
-    } catch (error) {
-      throw new BadRequestException('Coin doesnt exist');
+    if (!coinList) {
+      try {
+        const response = await axios.get(`${this.rateServiceUrl}/coin-list`, {
+          headers: { 'X-User-ID': userId },
+        });
+
+        coinList = response.data;
+        await this.cacheManager.set(coinListCacheKey, coinList);
+      } catch (error) {
+        throw new InternalServerErrorException('Failed to fetch coin list');
+      }
     }
+
+    // in that point of the code, the coinList is defined
+    const isExist = coinList!.find((data) => {
+      return data.name === coin;
+    });
+
+    if (!isExist) {
+      throw new BadRequestException('Coin doesn’t exist');
+    }
+
+    await this.cacheManager.set(cacheKey, true);
   }
 }

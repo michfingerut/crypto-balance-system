@@ -58,7 +58,7 @@ export class RateService {
     return rates;
   }
 
-  private async getCoinList() {
+  async getCoinList() {
     //using cache mechanism to cache the ids. so first, i check if the id exists, if not sending req to coin geko API
     const cachedCoinList: CoinEntry[] | null = await this.cacheManager.get(
       this.coinListCacheKey,

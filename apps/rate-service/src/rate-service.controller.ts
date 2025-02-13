@@ -35,11 +35,11 @@ export class RateServiceController {
     return res;
   }
 
-  //TODO: add validation
-  @Get(':coin')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async getExist(@Param('coin') coin: string) {
-    await this.rateService.isExist(coin);
-    this.logger.log(`get exist ${coin}`);
+  @Get('/coin-list')
+  async getCoinList() {
+    const res = await this.rateService.getCoinList();
+    this.logger.log(`get coin list`);
+
+    return res;
   }
 }

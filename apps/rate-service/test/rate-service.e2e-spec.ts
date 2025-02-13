@@ -5,6 +5,7 @@ import { RateServiceModule } from '../src/rate-service.module';
 import testUtils from '../../../testUtils/index';
 import TestAgent from 'supertest/lib/agent';
 
+//TODO: make mock to the api call to coin-geko due to rate limit
 describe('RateServiceController (e2e)', () => {
   let app: INestApplication;
   let req: TestAgent;
@@ -80,17 +81,13 @@ describe('RateServiceController (e2e)', () => {
     expect(getRes2.statusCode).toBe(NOT_FOUND);
   });
 
-  it('basic .GET is exist', async () => {
+  it('basic .GET coin list', async () => {
     const getResExist = await req
-      .get(`${route}/bitcoin`)
+      .get(`${route}/coin-list`)
       .set('X-User-ID', userId);
 
-    expect(getResExist.statusCode).toBe(NO_CONTENT);
-
-    const getResNoExist = await req
-      .get(`${route}/michal`)
-      .set('X-User-ID', userId);
-
-    expect(getResNoExist.statusCode).toBe(NOT_FOUND);
+    expect(getResExist.statusCode).toBe(OK);
+    expect(Array.isArray(getResExist.body)).toBe(true);
+    expect(getResExist.body.length).toBeGreaterThan(0);
   });
 });
