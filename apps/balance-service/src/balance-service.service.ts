@@ -53,8 +53,9 @@ export class BalanceDataService {
         let rate = ratesMap.get(coin);
 
         if (rate === undefined) {
-          const res = (
-            await axios.get(
+          const res = //TODO: shared interface (?)
+          (
+            await axios.get<{ id: string; name: string; symbol: string }[]>(
               `${this.rateServiceUrl}?coin=${coin}&vs_coin=${vsCoin}`,
               {
                 headers: {
@@ -74,7 +75,10 @@ export class BalanceDataService {
 
       return { value };
     } catch (err) {
-      if (err.status === HttpStatus.NOT_FOUND) {
+      if (
+        axios.isAxiosError(err) &&
+        err.response?.status === HttpStatus.NOT_FOUND
+      ) {
         throw new BadRequestException('Coin doesnt exist');
       } else {
         throw err;
@@ -144,7 +148,7 @@ export class BalanceDataService {
 
         coinList = response.data;
         await this.cacheManager.set(coinListCacheKey, coinList);
-      } catch (error) {
+      } catch {
         throw new InternalServerErrorException('Failed to fetch coin list');
       }
     }
