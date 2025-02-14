@@ -27,7 +27,7 @@ export class RateService {
     const coinId = await this.getCoinId(coin);
     const cacheKey = `crypto-rate-${coinId}`;
 
-    let cachedRates =
+    const cachedRates =
       (await this.cacheManager.get<{ [key: string]: number }>(cacheKey)) || {};
 
     if (cachedRates[vsCoin]) {
@@ -78,14 +78,14 @@ export class RateService {
     if (!coinData) {
       throw new NotFoundException('Not found coins');
     }
-    return coinData!.id;
+    return coinData.id;
   }
 
   private async getCachedKeys(): Promise<
     { coinId: string; vsCoins: string[] }[]
   > {
     const coinList = await this.getCoinList();
-    let cacheEntries: { coinId: string; vsCoins: string[] }[] = [];
+    const cacheEntries: { coinId: string; vsCoins: string[] }[] = [];
 
     for (const coin of coinList) {
       const cacheKey = `crypto-rate-${coin.id}`;
