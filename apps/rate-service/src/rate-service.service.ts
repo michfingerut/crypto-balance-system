@@ -31,7 +31,7 @@ export class RateService {
       (await this.cacheManager.get<Record<string, number>>(cacheKey)) || {};
 
     if (cachedRates[vsCoin]) {
-      return { [vsCoin]: cachedRates[vsCoin] };
+      return { [coinId]: { [vsCoin]: cachedRates[vsCoin] } };
     }
 
     try {
