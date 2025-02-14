@@ -49,3 +49,5 @@ npm run lint
 ```
 
 make sure to push with 0 lint erros
+
+TODO: add future features suggestions, what i would add if i had enough time
