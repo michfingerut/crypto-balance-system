@@ -6,7 +6,7 @@ export class CreateAssetDto {
   @IsNotEmpty()
   coin: string;
 
-  @Transform(({ value }) => {
+  @Transform(({ value }): number => {
     if (typeof value === 'string' && !isNaN(Number(value))) {
       return parseFloat(value);
     }
