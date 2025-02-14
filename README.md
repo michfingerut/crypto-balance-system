@@ -40,3 +40,5 @@ will run all tests of balance-service
 ## env
 
 there are 2 .env files both for blanace and rate service
+
+npx prettier --write
