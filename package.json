@@ -14,13 +14,14 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/crypto-balance-system/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
+    "test": " npm run test:balance-service && npm run test:rate-e2e && npm run test:rate-mock   && npm run test:co-spec",
+    "test:co-spec": "jest",
+    "test:balance-service": "jest --config ./apps/balance-service/test/jest-e2e.json",
+    "test:rate-e2e": "jest --config ./apps/rate-service/test/e2eTests/jest-e2e.json --detectOpenHandles --forceExit",
+    "test:rate-mock": "jest --config ./apps/rate-service/test/mockTests/jest-mock.json --detectOpenHandles --forceExit",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/crypto-balance-system/test/jest-e2e.json",
-    "test:balance-service": "jest --config ./apps/balance-service/test/jest-e2e.json",
-    "test:rate-service": "jest --config ./apps/rate-service/test/jest-e2e.json"
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^3.0.0",
@@ -55,6 +56,7 @@
     "eslint-plugin-prettier": "^5.2.2",
     "globals": "^15.14.0",
     "jest": "^29.7.0",
+    "jest-mock-axios": "^4.8.0",
     "lodash": "^4.17.21",
     "prettier": "^3.4.2",
     "source-map-support": "^0.5.21",

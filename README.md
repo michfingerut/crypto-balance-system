@@ -4,6 +4,7 @@ before
 start running the server:
 
 ```bash
+npm i
 npm run start:dev
 ```
 
@@ -26,6 +27,8 @@ will run all `.e2e-spec` tests
 ```bash
  npm run test:balance-service
 ```
+
+- make sure to not run all tests togetheer, free coinGeko api has rate-limit
 
 will run all tests of balance-service
 
