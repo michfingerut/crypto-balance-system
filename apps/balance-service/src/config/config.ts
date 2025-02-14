@@ -22,7 +22,7 @@ class ConfigUtils {
     return ConfigUtils.instance;
   }
 
-  get(key: string): string | number {
+  get(key: 'serverPort' | 'rateServerUrl'): string | number {
     return this.env[key];
   }
 }
