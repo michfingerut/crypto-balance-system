@@ -50,7 +50,7 @@ export class RateService {
       cachedRates[vsCoin] = newRates[vsCoin];
 
       await this.cacheManager.set(cacheKey, cachedRates);
-      return { [vsCoin]: newRates[vsCoin] };
+      return { [coinId]: { [vsCoin]: newRates[vsCoin] } };
     } catch (error) {
       throw new NotFoundException('Not found coins');
     }
