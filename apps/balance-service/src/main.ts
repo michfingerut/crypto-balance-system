@@ -22,5 +22,5 @@ async function bootstrap() {
 
 const logger = new CBSLogging();
 bootstrap().catch((err) => {
-  logger.error(`Error starting the app: ${err}`);
+  logger.error(`Error starting the balance-service: ${err}`);
 });
