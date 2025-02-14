@@ -7,8 +7,6 @@ import { RateServiceModule } from 'apps/rate-service/src/rate-service.module';
 import { MiddlewareModule } from '@app/shared/middleware/middleware.module';
 import { FileOpModule } from '@app/shared/file-op/file-op.module';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -19,7 +17,5 @@ import { AppService } from './app.service';
     RateServiceModule,
     MiddlewareModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
