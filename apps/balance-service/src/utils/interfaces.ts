@@ -1,13 +1,13 @@
-type BalanceEntry = {
+interface BalanceEntry {
   userId: string;
   coin: string;
   amount: number;
   id: number;
-};
+}
 
-type BalanceEnv = {
+interface BalanceEnv {
   serverPort: number;
   rateServerUrl: string;
-};
+}
 
-export { type BalanceEntry, type BalanceEnv };
+export { BalanceEntry, BalanceEnv };

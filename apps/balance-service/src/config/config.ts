@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 
-import { BalanceEnv } from '../utils/types';
+import { BalanceEnv } from '../utils/interfaces';
 
 class ConfigUtils {
   private static instance: ConfigUtils;
