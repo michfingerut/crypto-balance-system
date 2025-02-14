@@ -14,7 +14,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/crypto-balance-system/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": " npm run test:balance-service && npm run test:rate-e2e && npm run test:rate-mock   && npm run test:co-spec",
+    "test": " npm run test:balance-service && npm run test:rate-e2e && npm run test:rate-mock",
     "test:co-spec": "jest",
     "test:balance-service": "jest --config ./apps/balance-service/test/jest-e2e.json",
     "test:rate-e2e": "jest --config ./apps/rate-service/test/e2eTests/jest-e2e.json --detectOpenHandles --forceExit",

@@ -12,6 +12,19 @@ import {
   testResponse,
 } from '../../../testUtils/index';
 
+jest.mock('@app/shared/logging/logging.service', () => {
+  return {
+    CBSLogging: jest.fn().mockImplementation(() => ({
+      log: jest.fn(),
+      error: jest.fn(),
+      warn: jest.fn(),
+      debug: jest.fn(),
+      verbose: jest.fn(),
+      setContext: jest.fn(),
+    })),
+  };
+});
+
 describe('BalanceServiceController (e2e)', () => {
   let app: INestApplication;
   let req: TestAgent;
