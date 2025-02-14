@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ForbiddenException,
+  HttpStatus,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -38,7 +39,10 @@ export class BalanceDataService {
     return data.filter((entry) => entry.userId === userId);
   }
 
-  async getCalculation(userId: string, vsCoin: string) {
+  async getCalculation(
+    userId: string,
+    vsCoin: string,
+  ): Promise<{ value: number }> {
     const ratesMap = new Map<string, number>();
     try {
       const assets = await this.getAssets(userId);
@@ -70,7 +74,11 @@ export class BalanceDataService {
 
       return { value };
     } catch (err) {
-      throw new BadRequestException('Coin doesnt exist');
+      if (err.status === HttpStatus.NOT_FOUND) {
+        throw new BadRequestException('Coin doesnt exist');
+      } else {
+        throw err;
+      }
     }
   }
 

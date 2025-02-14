@@ -13,11 +13,11 @@ import {
 import { ValidationPipe } from '@nestjs/common';
 
 import { CBSLogging } from '@app/shared/logging/logging.service';
+import { CBSError } from '@app/shared/error/error.service';
 
 import { BalanceDataService } from './balance-service.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { GetCalcDto } from './dto/get-calculation.dto';
-import { CBSError } from '@app/shared/error/error.service';
 
 @Controller('balance')
 @UseFilters(CBSError)
@@ -36,7 +36,7 @@ export class BalanceServiceController {
     return res;
   }
 
-  @Get('total') // /balance/total?coin=
+  @Get('total')
   async getCalculationOfTotalAssets(
     @Headers('X-User-ID') userId: string,
     @Query(ValidationPipe) query: GetCalcDto,

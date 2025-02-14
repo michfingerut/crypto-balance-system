@@ -22,7 +22,7 @@ class ConfigUtils {
     return ConfigUtils.instance;
   }
 
-  get(key: string) {
+  get(key: string): string | number {
     return this.env[key];
   }
 }
