@@ -7,7 +7,6 @@ import { RateServiceModule } from 'apps/rate-service/src/rate-service.module';
 import { MiddlewareModule } from '@app/shared/middleware/middleware.module';
 import { FileOpModule } from '@app/shared/file-op/file-op.module';
 
-
 @Module({
   imports: [
     BalanceServiceModule,

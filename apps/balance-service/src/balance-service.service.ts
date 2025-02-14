@@ -7,15 +7,22 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { Cache } from 'cache-manager';
 import * as path from 'path';
 
 import { CBSFileOpService } from '@app/shared/file-op/file-op.service';
 
 import { CreateAssetDto } from './dto/create-asset.dto';
-import { type BalanceEntry } from './utils/types';
+import { BalanceEntry } from './utils/interfaces';
 import { ConfigUtils } from './config/config';
+
+//TODO: should be import from shared interface
+interface CoinEntry {
+  id: string;
+  symbol: string;
+  name: string;
+}
 
 @Injectable()
 export class BalanceDataService {
@@ -53,18 +60,19 @@ export class BalanceDataService {
         let rate = ratesMap.get(coin);
 
         if (rate === undefined) {
-          const res = //TODO: shared interface (?)
-            (
-              await axios.get<{ id: string; name: string; symbol: string }[]>(
-                `${this.rateServiceUrl}?coin=${coin}&vs_coin=${vsCoin}`,
-                {
-                  headers: {
-                    'X-User-ID': userId,
-                  },
+          const res = (
+            await axios.get<CoinEntry[]>(
+              `${this.rateServiceUrl}?coin=${coin}&vs_coin=${vsCoin}`,
+              {
+                headers: {
+                  'X-User-ID': userId,
                 },
-              )
-            ).data;
+              },
+            )
+          ).data;
 
+          // on SUCCSSES, the object returned will have the vsCoin property
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           rate = res[vsCoin];
 
           ratesMap.set(coin, rate!); //if rate doesnt exist, rate-service throws exception
@@ -103,6 +111,8 @@ export class BalanceDataService {
     return newEntry;
   }
 
+  //empty object neess to be returned when the asset doesnt exist
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   async removeAssets(id: number, userId: string): Promise<BalanceEntry | {}> {
     //check if user exist in the file
     const balanceEntries = await this.fileOp.readDataFromFile(
@@ -135,16 +145,16 @@ export class BalanceDataService {
     if (cachedExists) return;
 
     // Check if the full coin list is cached
-    let coinList =
-      await this.cacheManager.get<
-        { id: string; name: string; symbol: string }[]
-      >(coinListCacheKey);
+    let coinList = await this.cacheManager.get<CoinEntry[]>(coinListCacheKey);
 
     if (!coinList) {
       try {
-        const response = await axios.get(`${this.rateServiceUrl}/coin-list`, {
-          headers: { 'X-User-ID': userId },
-        });
+        const response: AxiosResponse<CoinEntry[]> = await axios.get(
+          `${this.rateServiceUrl}/coin-list`,
+          {
+            headers: { 'X-User-ID': userId },
+          },
+        );
 
         coinList = response.data;
         await this.cacheManager.set(coinListCacheKey, coinList);
@@ -154,7 +164,7 @@ export class BalanceDataService {
     }
 
     // in that point of the code, the coinList is defined
-    const coinData = coinList!.find(
+    const coinData = coinList.find(
       (c) => c.name.toLowerCase() === coin.toLowerCase(),
     );
 
