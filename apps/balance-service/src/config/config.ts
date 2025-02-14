@@ -7,10 +7,11 @@ class ConfigUtils {
   private env: BalanceEnv;
 
   private constructor() {
-    dotenv.config({ path: './apps/rate-service/.env' });
+    dotenv.config({ path: './apps/balance-service/.env' });
 
     this.env = {
       serverPort: parseInt(process.env.SERVER_PORT || '3001'),
+      rateServerUrl: process.env.RATE_SERVER_URL as string,
     };
   }
 

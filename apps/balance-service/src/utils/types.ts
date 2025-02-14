@@ -7,6 +7,7 @@ type BalanceEntry = {
 
 type BalanceEnv = {
   serverPort: number;
+  rateServerUrl: string;
 };
 
 export { type BalanceEntry, type BalanceEnv };

@@ -14,6 +14,7 @@ import { CBSFileOpService } from '@app/shared/file-op/file-op.service';
 
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { type BalanceEntry } from './utils/types';
+import { ConfigUtils } from './config/config';
 
 @Injectable()
 export class BalanceDataService {
@@ -23,8 +24,9 @@ export class BalanceDataService {
     'data',
     'balanceData.json',
   );
-  //TODO:env
-  private readonly rateServiceUrl = 'http://localhost:3000/rate';
+
+  private readonly rateServiceUrl =
+    ConfigUtils.getInstance().get('rateServerUrl');
 
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
