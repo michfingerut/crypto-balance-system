@@ -54,16 +54,16 @@ export class BalanceDataService {
 
         if (rate === undefined) {
           const res = //TODO: shared interface (?)
-          (
-            await axios.get<{ id: string; name: string; symbol: string }[]>(
-              `${this.rateServiceUrl}?coin=${coin}&vs_coin=${vsCoin}`,
-              {
-                headers: {
-                  'X-User-ID': userId,
+            (
+              await axios.get<{ id: string; name: string; symbol: string }[]>(
+                `${this.rateServiceUrl}?coin=${coin}&vs_coin=${vsCoin}`,
+                {
+                  headers: {
+                    'X-User-ID': userId,
+                  },
                 },
-              },
-            )
-          ).data;
+              )
+            ).data;
 
           rate = res[vsCoin];
 
