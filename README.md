@@ -41,4 +41,11 @@ will run all tests of balance-service
 
 there are 2 .env files both for blanace and rate service
 
+- dont forget to run
+
+```bash
 npx prettier --write
+npm run lint
+```
+
+make sure to push with 0 lint erros

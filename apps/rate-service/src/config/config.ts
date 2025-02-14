@@ -24,7 +24,7 @@ class ConfigUtils {
     return ConfigUtils.instance;
   }
 
-  get(key: string) {
+  get(key: 'serverPort' | 'rateRefreshInterval'): string | number {
     return this.env[key];
   }
 }

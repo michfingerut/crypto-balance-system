@@ -14,7 +14,13 @@ async function bootstrap() {
   app.useLogger(new CBSLogging());
 
   const config = ConfigUtils.getInstance();
+  const port = config.get('serverPort');
 
-  await app.listen(config.get('SERVER_PORT'));
+  await app.listen(port);
+  logger.log(`Balance service start listening on post : ${port} `);
 }
-bootstrap();
+
+const logger = new CBSLogging();
+bootstrap().catch((err) => {
+  logger.error(`Error starting the rate-service: ${err}`);
+});

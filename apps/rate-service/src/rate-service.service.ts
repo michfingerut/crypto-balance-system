@@ -104,7 +104,8 @@ export class RateService {
     return cacheEntries;
   }
 
-  @Interval(ConfigUtils.getInstance().get('rateRefreshInterval'))
+  //rateRefreshInterval will be a number
+  @Interval(ConfigUtils.getInstance().get('rateRefreshInterval') as number)
   async refreshCryptoRates() {
     this.logger.log('Refreshing crypto rates...');
     const cacheEntries = await this.getCachedKeys();
