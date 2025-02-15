@@ -3,6 +3,4 @@ interface RateEnv {
   serverPort: number;
 }
 
-
-
-export {  RateEnv };
+export { RateEnv };

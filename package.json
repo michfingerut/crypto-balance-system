@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "format": "prettier --config .prettierrc --write \"apps/*/src/**/*.{ts,js,json}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.5.1"
+  }
+}

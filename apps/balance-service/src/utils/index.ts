@@ -3,4 +3,4 @@ interface BalanceEnv {
   rateServerUrl: string;
 }
 
-export {  BalanceEnv };
+export { BalanceEnv };

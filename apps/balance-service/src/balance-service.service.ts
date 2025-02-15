@@ -13,7 +13,10 @@ import * as path from 'path';
 
 import { CBSFileOpService } from '@app/shared/file-op/file-op.service';
 import { CoinEntry } from '@app/shared/interfaces/rate/rate.interface';
-import { AssetsCalc, BalanceEntry } from '@app/shared/interfaces/balance/balance.interface';
+import {
+  AssetsCalc,
+  BalanceEntry,
+} from '@app/shared/interfaces/balance/balance.interface';
 
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { ConfigUtils } from './config/config';
@@ -40,10 +43,7 @@ export class BalanceDataService {
     return data.filter((entry) => entry.userId === userId);
   }
 
-  async getCalculation(
-    userId: string,
-    vsCoin: string,
-  ): Promise<AssetsCalc> {
+  async getCalculation(userId: string, vsCoin: string): Promise<AssetsCalc> {
     const ratesMap = new Map<string, number>();
     try {
       const assets = await this.getAssets(userId);
