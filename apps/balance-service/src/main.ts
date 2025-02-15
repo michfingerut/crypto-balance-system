@@ -1,9 +1,10 @@
 import { NestFactory } from '@nestjs/core';
+import { SwaggerModule } from '@nestjs/swagger';
 
 import { CBSLogging } from '@app/shared/logging/logging.service';
 
 import { BalanceServiceModule } from './balance-service.module';
-import { ConfigUtils } from './config/config';
+import { swaggerConfig, EnvClass } from './config';
 
 async function bootstrap() {
   const app = await NestFactory.create(BalanceServiceModule, {
@@ -14,7 +15,10 @@ async function bootstrap() {
   // Set up ONLY our custom logger
   app.useLogger(logger);
 
-  const config = ConfigUtils.getInstance();
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, document);
+
+  const config = EnvClass.getInstance();
   const port = config.get('serverPort');
   await app.listen(port);
   logger.log(`Balance service start listening on post : ${port} `);

@@ -19,8 +19,7 @@ import {
 } from '@app/shared/interfaces/balance/balance.interface';
 
 import { CreateAssetDto } from './dto/create-asset.dto';
-import { ConfigUtils } from './config/config';
-
+import { EnvClass } from './config';
 @Injectable()
 export class BalanceDataService {
   private readonly dataFilePath = path.join(
@@ -30,8 +29,7 @@ export class BalanceDataService {
     'balanceData.json',
   );
 
-  private readonly rateServiceUrl =
-    ConfigUtils.getInstance().get('rateServerUrl');
+  private readonly rateServiceUrl = EnvClass.getInstance().get('rateServerUrl');
 
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,

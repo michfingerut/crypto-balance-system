@@ -1,9 +1,10 @@
 import { NestFactory } from '@nestjs/core';
+import { SwaggerModule } from '@nestjs/swagger';
 
 import { CBSLogging } from '@app/shared/logging/logging.service';
 
 import { RateServiceModule } from './rate-service.module';
-import { ConfigUtils } from './config/config';
+import { swaggerConfig, EnvClass } from './config';
 
 async function bootstrap() {
   const app = await NestFactory.create(RateServiceModule, {
@@ -12,8 +13,10 @@ async function bootstrap() {
   });
 
   app.useLogger(new CBSLogging());
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, document);
 
-  const config = ConfigUtils.getInstance();
+  const config = EnvClass.getInstance();
   const port = config.get('serverPort');
 
   await app.listen(port);

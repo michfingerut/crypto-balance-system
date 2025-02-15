@@ -2,8 +2,8 @@ import * as dotenv from 'dotenv';
 
 import { BalanceEnv } from '../utils';
 
-class ConfigUtils {
-  private static instance: ConfigUtils;
+class EnvClass {
+  private static instance: EnvClass;
   private env: BalanceEnv;
 
   private constructor() {
@@ -15,11 +15,11 @@ class ConfigUtils {
     };
   }
 
-  static getInstance(): ConfigUtils {
-    if (!ConfigUtils.instance) {
-      ConfigUtils.instance = new ConfigUtils();
+  static getInstance(): EnvClass {
+    if (!EnvClass.instance) {
+      EnvClass.instance = new EnvClass();
     }
-    return ConfigUtils.instance;
+    return EnvClass.instance;
   }
 
   get(key: 'serverPort' | 'rateServerUrl'): string | number {
@@ -27,4 +27,4 @@ class ConfigUtils {
   }
 }
 
-export { ConfigUtils };
+export { EnvClass };

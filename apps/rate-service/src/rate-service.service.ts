@@ -10,7 +10,7 @@ import {
   CryptoRateResponse,
 } from '@app/shared/interfaces/rate/rate.interface';
 
-import { ConfigUtils } from './config/config';
+import { EnvClass } from './config';
 
 @Injectable()
 export class RateService {
@@ -108,7 +108,7 @@ export class RateService {
   }
 
   // rateRefreshInterval will be a number
-  @Interval(ConfigUtils.getInstance().get('rateRefreshInterval') as number)
+  @Interval(EnvClass.getInstance().get('rateRefreshInterval') as number)
   async refreshCryptoRates() {
     this.logger.log('Refreshing crypto rates...');
     const cacheEntries = await this.getCachedKeys();
