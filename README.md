@@ -5,10 +5,6 @@ A simple crypto balance system developed using NestJS monorepo architecture. The
 ## Table of Contents
 
 - [Overview](#overview)
-- [Services](#services)
-  - [Balance Service](#balance-service)
-  - [Rate Service](#rate-service)
-  - [Shared Library](#shared-library)
 - [Getting Started](#getting-started)
 - [API Documentation with Swagger](#api-documentation-with-swagger)
 - [Development Process](#development-process)
