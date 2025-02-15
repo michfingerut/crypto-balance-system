@@ -39,7 +39,7 @@ The balance-service microservice allows users to manage their crypto holdings an
 The rate-service microservice integrates with the CoinGecko API to fetch and store current cryptocurrency rates. It also includes the following:
 
 * **Caching Mechanism**: The service caches the latest crypto rates to minimize API calls.
-* **Background Job**: A job runs periodically to update the rates in the cache.
+* **Background Job**: A job runs periodically to update the rates in the cache, The user can config the interval.
 
 ### Shared Library
 The shared library contains modules that are used by both the `balance-service` and `rate-service`:
@@ -53,7 +53,7 @@ Shared Interfaces: Common interfaces used across services.
 ### Cache Mechanism
 The system employs a cache mechanism to optimize the performance of the services:
 
-1. **Rate Service**: Stores the cache of cryptocurrency rates to reduce the frequency of API calls to the CoinGecko API.
+1. **Rate Service**: Stores the cache of crypto currency rates to reduce the frequency of API calls to the CoinGecko API. 
 2. **Balance Service**: Caches the list of user coins and their holdings. This cache is updated lazily, ensuring that the value of each coin is fetched only when needed, reducing redundant calculations.
 
 ## Getting Started
