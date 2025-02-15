@@ -165,5 +165,12 @@ Once the application is running, navigate to the following URL in your browser t
   - Integrate with an Identity and Access Management (IAM) service to handle authentication and authorization.
 
 - **Real-Time Updates via WebSockets**
+
   - Add WebSocket support to push live exchange rate updates to connected clients.
   - Notify users when a significant rate change occurs or if a configured threshold is met.
+
+- **Fixes**
+  - Hotfix for rate service mock tests.
+  - Remove `any` type from tests and enforce `ESLint` rules on tests.
+  - Add shared test utilities.
+  - Add `nodemon` configuration for an easier development process.
