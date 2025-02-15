@@ -12,17 +12,11 @@ import { Cache } from 'cache-manager';
 import * as path from 'path';
 
 import { CBSFileOpService } from '@app/shared/file-op/file-op.service';
+import { CoinEntry } from '@app/shared/interfaces/rate/rate.interface';
+import { AssetsCalc, BalanceEntry } from '@app/shared/interfaces/balance/balance.interface';
 
 import { CreateAssetDto } from './dto/create-asset.dto';
-import { BalanceEntry } from './utils/interfaces';
 import { ConfigUtils } from './config/config';
-
-//TODO: should be import from shared interface
-interface CoinEntry {
-  id: string;
-  symbol: string;
-  name: string;
-}
 
 @Injectable()
 export class BalanceDataService {
@@ -49,7 +43,7 @@ export class BalanceDataService {
   async getCalculation(
     userId: string,
     vsCoin: string,
-  ): Promise<{ value: number }> {
+  ): Promise<AssetsCalc> {
     const ratesMap = new Map<string, number>();
     try {
       const assets = await this.getAssets(userId);

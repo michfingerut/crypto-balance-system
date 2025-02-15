@@ -5,8 +5,8 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
 
 import { CBSLogging } from '@app/shared/logging/logging.service';
+import { CoinEntry, CryptoRateResponse } from '@app/shared/interfaces/rate/rate.interface';
 
-import { CoinEntry, CryptoRateResponse } from './utils/interfaces';
 import { ConfigUtils } from './config/config';
 
 @Injectable()

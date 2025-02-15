@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 
-import { RateEnv } from '../utils/interfaces';
+import { RateEnv } from '../utils';
 
 class ConfigUtils {
   private static instance: ConfigUtils;
