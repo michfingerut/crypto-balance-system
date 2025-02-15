@@ -83,6 +83,18 @@ First, build the Docker containers without cache to ensure fresh dependencies:
     ```
 The services will be available on the ports defined in your .env file.
 
+## API Documentation with Swagger
+
+This project uses [Swagger](https://swagger.io/) to automatically generate and display the API documentation. The documentation is available via the Swagger UI, which allows you to interact with the API directly through a web interface.
+
+### Accessing the Swagger UI
+
+Once the application is running, navigate to the following URL in your browser to access the Swagger UI:
+
+```text
+  http://localhost:3001/api #for balanace service api
+  http://localhost:3002/api #for rate service api
+```
 ## Development Process
 * **Running Scripts**: You can run tests and scripts within the container by using the relevant `package.json` file located in each service directory.
   * Example to run tests for balance-service:

@@ -22,6 +22,6 @@
       "@app/shared/*": ["libs/shared/src/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../balance-service/src/swagger"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

@@ -22,8 +22,7 @@ export class RateService {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly logger: CBSLogging,
-  ) {
-  }
+  ) {}
 
   async getRate(coin: string, vsCoin: string) {
     const coinId = await this.getCoinId(coin);
