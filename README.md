@@ -22,15 +22,9 @@ A simple crypto balance system developed using NestJS monorepo architecture. The
 - [Accessing Data Storage](#accessing-data-storage)
 - [Future improvments and Features](#future-improvements-and-features)
 
-## Overview
+# Overview
 
 This project is designed as a monorepo architecture using NestJS, where two independent microservices are integrated to form the core functionality:
-
-1. **Balance Service**: Manages the user's crypto balance and allows CRUD operations for assets.
-2. **Rate Service**: Fetches real-time cryptocurrency rates from the CoinGecko API and stores them in a cache.
-3. **Shared Library**: Contains utility functions and shared modules for file management, logging, and error handling.
-
-## Services
 
 ### Balance Service
 
@@ -38,11 +32,13 @@ The balance-service microservice allows users to manage their crypto holdings an
 
 - **CRUD Operations** for managing user balances (add/remove assets, retrieve balances).
 - **Calculate Total Balance**: It computes the total balance in a specified currency.
+- **Cache Mechanism**: The service caches the list of user coins and their holdings.
 
 ### Rate Service
 
 The rate-service microservice integrates with the CoinGecko API to fetch and store current cryptocurrency rates. It also includes the following:
 
+- **Get Operations**: for fatching coins current rate and crypto coins list.
 - **Caching Mechanism**: The service caches the latest crypto rates to minimize API calls.
 - **Background Job**: A job runs periodically to update the rates in the cache, The user can config the interval.
 
@@ -56,13 +52,6 @@ The shared library contains modules that are used by both the `balance-service` 
   Shared Interfaces: Common interfaces used across services.
 - **Utility Functions**: Helper functions for common needs, such as data formatting or calculations.
 
-### Cache Mechanism
-
-The system employs a cache mechanism to optimize the performance of the services:
-
-1. **Rate Service**: Stores the cache of crypto currency rates to reduce the frequency of API calls to the CoinGecko API.
-2. **Balance Service**: Caches the list of user coins and their holdings. This cache is updated lazily, ensuring that the value of each coin is fetched only when needed, reducing redundant calculations.
-
 ## Getting Started
 
 1.  **Clone the Repository**:
@@ -72,6 +61,7 @@ The system employs a cache mechanism to optimize the performance of the services
     ```
 2.  **Set Up Environment Variables**:
     Create a `.env` file in the root directory based on the `.env_template` and add necessary environment variables:
+
     ```env
       BALANCE_SERVER_PORT=3001
       RATE_SERVER_PORT=3002
@@ -80,6 +70,7 @@ The system employs a cache mechanism to optimize the performance of the services
       # Optional, defualt=600000 (10 minutes)
       RATE_REFRESH_INTERVAL=
     ```
+
 3.  **Build and Start Services with Docker**:
     First, build the Docker containers without cache to ensure fresh dependencies:
 
