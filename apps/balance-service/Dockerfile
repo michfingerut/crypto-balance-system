@@ -1,18 +1,26 @@
-FROM node:18
+FROM node:22
+
+ENV SERVER_PORT=${SERVER_PORT} 
+ENV RATE_SERVER_URL=${RATE_SERVER_URL}
 
 WORKDIR /usr/src/app
 
 RUN npm install -g nodemon
 
-COPY ../../package*.json ./
+COPY ./package*.json ./
 
 RUN npm install
 
 COPY . .
 
-RUN mkdir -p ./dist/apps/data && \
-    if [ ! -f ./dist/apps/data/balanceData.json ]; then \
-      echo '{"balance": 0}' > ./dist/apps/data/balanceData.json; \
+RUN mkdir -p ./data && \
+    if [ ! -f ./data/balanceData.json ]; then \
+      echo '[]' > ./data/balanceData.json; \
+    fi
+
+RUN mkdir -p ./dist/data && \
+    if [ ! -f ./dist/data/balanceData.json ]; then \
+      echo '[]' > ./dist/data/balanceData.json; \
     fi
 
 EXPOSE 3001
