@@ -9,7 +9,7 @@
     "build": "nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",
-      "lint": "eslint --config eslint.config.mjs \"src/**/*.ts\" --fix --ignore-pattern \"**/*.spec.ts\" --ignore-pattern \"**/*-spec.ts\"",
+    "lint": "eslint --config eslint.config.mjs \"src/**/*.ts\" --fix --ignore-pattern \"**/*.spec.ts\" --ignore-pattern \"**/*-spec.ts\"",
     "test:e2e": "jest --config ./test/e2eTests/jest-e2e.json --detectOpenHandles --forceExit",
     "test:mock": "jest --config ./test/mockTests/jest-mock.json --detectOpenHandles --forceExit"
   },
@@ -19,6 +19,7 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/schedule": "^5.0.1",
+    "@nestjs/swagger": "^11.0.3",
     "axios": "^1.7.9",
     "cache-manager": "^6.4.0",
     "class-transformer": "^0.5.1",
@@ -27,7 +28,8 @@
     "fs": "^0.0.1-security",
     "keyv": "^5.2.3",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
