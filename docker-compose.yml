@@ -14,8 +14,6 @@ services:
     volumes:
       - ./libs/shared:/usr/src/app/libs/shared 
       - ./apps/balance-service/data:/usr/src/app/data 
-      - ./testUtils:/usr/testUtils 
-      - ./node_modules:/usr/testUtils/node_modules
     networks:
       - crypto-network
 
@@ -31,8 +29,6 @@ services:
       - NODE_ENV=development 
     volumes:
       - ./libs/shared:/usr/src/app/libs/shared 
-      - ./testUtils:/usr/testUtils 
-      - ./node_modules:/usr/testUtils/node_modules
     networks:
       - crypto-network
 

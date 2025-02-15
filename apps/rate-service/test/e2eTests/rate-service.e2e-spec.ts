@@ -4,7 +4,7 @@ import * as request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
 
 import { RateServiceModule } from '../../src/rate-service.module';
-import { getRandomUuid, statusCode } from '../../../../testUtils/index';
+import { getRandomUuid, statusCode } from '../testUtils/index';
 
 jest.mock('@app/shared/logging/logging.service', () => {
   return {

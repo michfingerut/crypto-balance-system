@@ -1,5 +1,8 @@
 # compiled output
 /dist
+/testUtils/node_modules
+/apps/balance-service/dist
+/apps/rate-service/dist
 /node_modules
 /build
 

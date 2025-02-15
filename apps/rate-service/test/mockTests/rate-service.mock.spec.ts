@@ -5,7 +5,7 @@ import TestAgent from 'supertest/lib/agent';
 import axios from 'axios';
 
 import { RateServiceModule } from '../../src/rate-service.module';
-import { getRandomUuid, statusCode } from '../../../../testUtils/index';
+import { getRandomUuid, statusCode } from '../testUtils/index';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;

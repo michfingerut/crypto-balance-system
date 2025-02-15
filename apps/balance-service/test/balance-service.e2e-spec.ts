@@ -10,7 +10,7 @@ import {
   getRandomUuid,
   statusCode,
   testResponse,
-} from '../../../testUtils/index';
+} from './testUtils/index';
 
 jest.mock('@app/shared/logging/logging.service', () => {
   return {
@@ -37,13 +37,13 @@ describe('BalanceServiceController (e2e)', () => {
   const { BAD_REQUEST, UNAUTHORIZED, FORBIDDEN } = statusCode.ERROR;
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [BalanceServiceModule],
-    }).compile();
+    // const moduleFixture: TestingModule = await Test.createTestingModule({
+    //   imports: [BalanceServiceModule],
+    // }).compile();
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
-    req = request(app.getHttpServer());
+    // app = moduleFixture.createNestApplication();
+    // await app.init();
+    req = request('http://localhost:3001');
   });
 
   describe('.POST /balance', () => {

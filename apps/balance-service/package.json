@@ -11,8 +11,7 @@
     "start:dev": "npm run build && nest start --watch",
     "start:debug": "nest start --debug --watch",
     "lint": "eslint \"{src}/**/*.ts\" --fix --ignore-pattern \"**/*.spec.ts\" --ignore-pattern \"**/*-spec.ts\"",
-    "test:co-spec": "jest",
-    "test:balance-service": "jest --config ./test/jest-e2e.json"
+    "test": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^3.0.0",
