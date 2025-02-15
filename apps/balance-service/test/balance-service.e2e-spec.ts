@@ -1,10 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
 import * as path from 'path';
 import * as request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
 
-import { BalanceServiceModule } from '../src/balance-service.module';
 import {
   clearFile,
   getRandomUuid,
@@ -12,39 +9,15 @@ import {
   testResponse,
 } from './testUtils/index';
 
-jest.mock('@app/shared/logging/logging.service', () => {
-  return {
-    CBSLogging: jest.fn().mockImplementation(() => ({
-      log: jest.fn(),
-      error: jest.fn(),
-      warn: jest.fn(),
-      debug: jest.fn(),
-      verbose: jest.fn(),
-      setContext: jest.fn(),
-    })),
-  };
-});
-
 describe('BalanceServiceController (e2e)', () => {
-  let app: INestApplication;
-  let req: TestAgent;
+  let req: TestAgent= request('http://localhost:3001');;
   const route: string = '/balance';
   const userId = getRandomUuid();
-  const dataFilePath = path.join(__dirname, '..', 'data', 'balanceData.json');
+  const dataFilePath = path.join(__dirname, '..', './dist/data', 'balanceData.json');
 
   //codes
   const { OK, CREATED } = statusCode.SUCCESS;
   const { BAD_REQUEST, UNAUTHORIZED, FORBIDDEN } = statusCode.ERROR;
-
-  beforeEach(async () => {
-    // const moduleFixture: TestingModule = await Test.createTestingModule({
-    //   imports: [BalanceServiceModule],
-    // }).compile();
-
-    // app = moduleFixture.createNestApplication();
-    // await app.init();
-    req = request('http://localhost:3001');
-  });
 
   describe('.POST /balance', () => {
     beforeEach(async () => {
@@ -257,7 +230,7 @@ describe('BalanceServiceController (e2e)', () => {
       const res = await req
         .get(`${route}/total`)
         .query({ coin: 'usd' })
-        .set('X-User-ID', userId);
+        .set('X-User-ID', getRandomUuid());
 
       testResponse(res, OK, { value: 0 });
     });
