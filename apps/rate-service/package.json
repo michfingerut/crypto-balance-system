@@ -1,15 +1,15 @@
 {
-  "name": "crypto-balance-system",
+  "name": "rate-service",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "A microservice that fetches and provides real-time cryptocurrency rates from external APIs.",
+  "author": "Michal Fingerut",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",
-    "lint": "eslint \"{src}/**/*.ts\" --fix --ignore-pattern \"**/*.spec.ts\" --ignore-pattern \"**/*-spec.ts\"",
+      "lint": "eslint --config eslint.config.mjs \"src/**/*.ts\" --fix --ignore-pattern \"**/*.spec.ts\" --ignore-pattern \"**/*-spec.ts\"",
     "test:e2e": "jest --config ./test/e2eTests/jest-e2e.json --detectOpenHandles --forceExit",
     "test:mock": "jest --config ./test/mockTests/jest-mock.json --detectOpenHandles --forceExit"
   },
