@@ -6,11 +6,11 @@ services:
       context: ./apps/balance-service
     container_name: balance-service
     ports:
-      - "${BALANCE_SERVER_PORT}:${BALANCE_SERVER_PORT}"
-    env_file:
-      - ./apps/balance-service/.env  
+      - "${BALANCE_SERVER_PORT}:${BALANCE_SERVER_PORT}" 
     environment:
       - NODE_ENV=development
+      - SERVER_PORT=${BALANCE_SERVER_PORT}
+      - RATE_SERVER_URL=${RATE_SERVER_URL}
     volumes:
       - ./libs/shared:/usr/src/app/libs/shared 
       - ./apps/balance-service/data:/usr/src/app/data 
@@ -23,10 +23,10 @@ services:
     container_name: rate-service
     ports:
       - "${RATE_SERVER_PORT}:${RATE_SERVER_PORT}"
-    env_file:
-      - ./apps/rate-service/.env 
     environment:
       - NODE_ENV=development 
+      - SERVER_PORT=${RATE_SERVER_PORT}
+      - RATE_REFRESH_INTERVAL=${RATE_REFRESH_INTERVAL}
     volumes:
       - ./libs/shared:/usr/src/app/libs/shared 
     networks:
