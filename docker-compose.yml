@@ -7,12 +7,15 @@ services:
     container_name: balance-service
     ports:
       - "${BALANCE_SERVER_PORT}:${BALANCE_SERVER_PORT}"
+    env_file:
+      - ./apps/balance-service/.env  
     environment:
       - NODE_ENV=development
     volumes:
       - ./libs/shared:/usr/src/app/libs/shared 
       - ./apps/balance-service/data:/usr/src/app/data 
       - ./testUtils:/usr/testUtils 
+      - ./node_modules:/usr/testUtils/node_modules
     networks:
       - crypto-network
 
@@ -22,11 +25,14 @@ services:
     container_name: rate-service
     ports:
       - "${RATE_SERVER_PORT}:${RATE_SERVER_PORT}"
+    env_file:
+      - ./apps/rate-service/.env 
     environment:
       - NODE_ENV=development 
     volumes:
       - ./libs/shared:/usr/src/app/libs/shared 
       - ./testUtils:/usr/testUtils 
+      - ./node_modules:/usr/testUtils/node_modules
     networks:
       - crypto-network
 

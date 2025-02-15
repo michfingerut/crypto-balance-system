@@ -2,7 +2,9 @@
   "compilerOptions": {
     "baseUrl": ".", 
     "paths": {
-      "*": ["../src/app/node_modules"]
+      "*": ["../src/app/node_modules"],
+      "@app/shared": ["./src/app/libs/shared/src"],
+      "@app/shared/*": ["./src/app/libs/shared/src/*"]
     }
   }
 }

@@ -9,14 +9,12 @@ RUN npm install -g nodemon
 
 COPY ./package*.json ./
 
-RUN npm install
+RUN npm install 
+
+RUN mkdir -p ../../testUtils/node_modules && \
+    ln -s ./node_modules ../../testUtils/node_modules
 
 COPY . .
-
-RUN mkdir -p ./data && \
-    if [ ! -f ./data/balanceData.json ]; then \
-      echo '[]' > ./data/balanceData.json; \
-    fi
 
 RUN mkdir -p ./dist/data && \
     if [ ! -f ./dist/data/balanceData.json ]; then \

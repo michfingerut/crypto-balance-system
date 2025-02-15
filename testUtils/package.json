@@ -1,0 +1,7 @@
+{
+  "name": "test-utils",
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "uuid": "^11.0.5"
+  }
+}

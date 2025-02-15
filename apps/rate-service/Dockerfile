@@ -11,6 +11,9 @@ COPY ./package*.json ./
 
 RUN npm install
 
+RUN mkdir -p ../../testUtils/node_modules && \
+    ln -s ./node_modules ../../testUtils/node_modules
+    
 COPY . .
 
 EXPOSE 3002
