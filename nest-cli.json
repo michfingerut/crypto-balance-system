@@ -19,15 +19,6 @@
         "tsConfigPath": "apps/balance-service/tsconfig.app.json"
       }
     },
-    "crypto-balance-system": {
-      "type": "application",
-      "root": "apps/crypto-balance-system",
-      "entryFile": "main",
-      "sourceRoot": "apps/crypto-balance-system/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/crypto-balance-system/tsconfig.app.json"
-      }
-    },
     "rate-service": {
       "type": "application",
       "root": "apps/rate-service",
