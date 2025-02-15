@@ -17,7 +17,7 @@ async function bootstrap() {
   const port = config.get('serverPort');
 
   await app.listen(port);
-  logger.log(`Balance service start listening on post : ${port} `);
+  logger.log(`rate service start listening on post : ${port} `);
 }
 
 const logger = new CBSLogging();
