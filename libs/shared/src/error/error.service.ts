@@ -9,16 +9,25 @@ import { Request, Response } from 'express';
 
 import { CBSLogging } from '../logging/logging.service';
 
+interface ErrorResponse {
+  message?: string | string[];
+  [key: string]: any;
+}
+
 @Catch(HttpException)
 export class CBSError implements ExceptionFilter {
   constructor(private readonly logger: CBSLogging) {}
+
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus() || HttpStatus.INTERNAL_SERVER_ERROR;
-    const message =
-      (exception.getResponse() as any).message || 'Internal serveer error';
+
+    const errorResponse = exception.getResponse() as ErrorResponse;
+    const message = Array.isArray(errorResponse.message)
+      ? errorResponse.message.join(', ')
+      : errorResponse.message || 'Internal server error';
 
     this.logger.error(` ${status} : ${message}`);
 

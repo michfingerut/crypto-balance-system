@@ -6,12 +6,11 @@ export class CBSFileOpService<T> {
   async readDataFromFile(dataFilePath: string): Promise<T[]> {
     try {
       const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-      return JSON.parse(fileContent);
+      return JSON.parse(fileContent) as unknown as T[];
     } catch (error) {
       throw new InternalServerErrorException(
-        `Error reading from file:${error}`,
+        `Error reading from file: ${error}`,
       );
-      return [];
     }
   }
 
@@ -19,9 +18,7 @@ export class CBSFileOpService<T> {
     try {
       await fs.writeFile(dataFilePath, JSON.stringify(data, null, 2), 'utf-8');
     } catch (error) {
-      throw new InternalServerErrorException(
-        `Error reading from file:${error}`,
-      );
+      throw new InternalServerErrorException(`Error writing to file: ${error}`);
     }
   }
 }

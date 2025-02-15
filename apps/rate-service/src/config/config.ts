@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 
-import { RateEnv } from '../utils/types';
+import { RateEnv } from '../utils';
 
 class ConfigUtils {
   private static instance: ConfigUtils;
@@ -24,7 +24,7 @@ class ConfigUtils {
     return ConfigUtils.instance;
   }
 
-  get(key: string) {
+  get(key: 'serverPort' | 'rateRefreshInterval'): string | number {
     return this.env[key];
   }
 }

@@ -12,6 +12,19 @@ import {
   testResponse,
 } from '../../../testUtils/index';
 
+jest.mock('@app/shared/logging/logging.service', () => {
+  return {
+    CBSLogging: jest.fn().mockImplementation(() => ({
+      log: jest.fn(),
+      error: jest.fn(),
+      warn: jest.fn(),
+      debug: jest.fn(),
+      verbose: jest.fn(),
+      setContext: jest.fn(),
+    })),
+  };
+});
+
 describe('BalanceServiceController (e2e)', () => {
   let app: INestApplication;
   let req: TestAgent;
@@ -195,8 +208,7 @@ describe('BalanceServiceController (e2e)', () => {
       );
     });
 
-    it.only('basic .GET /total', async () => {
-      //TODO: failing 404 coin not found from rate-service
+    it('basic .GET /total', async () => {
       const toSend = {
         coin: 'bitcoin',
         amount: 2,

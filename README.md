@@ -4,6 +4,7 @@ before
 start running the server:
 
 ```bash
+npm i
 npm run start:dev
 ```
 
@@ -27,6 +28,8 @@ will run all `.e2e-spec` tests
  npm run test:balance-service
 ```
 
+- make sure to not run all tests togetheer, free coinGeko api has rate-limit
+
 will run all tests of balance-service
 
 2 cache mechanism:
@@ -37,3 +40,14 @@ will run all tests of balance-service
 ## env
 
 there are 2 .env files both for blanace and rate service
+
+- dont forget to run
+
+```bash
+npx prettier --write
+npm run lint
+```
+
+make sure to push with 0 lint erros
+
+TODO: add future features suggestions, what i would add if i had enough time

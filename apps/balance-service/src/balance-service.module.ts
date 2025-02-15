@@ -16,7 +16,7 @@ import { BalanceDataService } from './balance-service.service';
     ErrorModule,
     CacheModule.register({
       store: 'memory',
-      ttl: 604800, //1 week
+      ttl: 0, //prevent automatic exp, will be updated according to user demend
     }),
   ],
   controllers: [BalanceServiceController],

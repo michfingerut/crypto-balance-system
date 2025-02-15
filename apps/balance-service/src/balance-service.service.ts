@@ -1,19 +1,22 @@
 import {
   BadRequestException,
   ForbiddenException,
+  HttpStatus,
   Inject,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { Cache } from 'cache-manager';
 import * as path from 'path';
 
 import { CBSFileOpService } from '@app/shared/file-op/file-op.service';
+import { CoinEntry } from '@app/shared/interfaces/rate/rate.interface';
+import { AssetsCalc, BalanceEntry } from '@app/shared/interfaces/balance/balance.interface';
 
 import { CreateAssetDto } from './dto/create-asset.dto';
-import { type BalanceEntry } from './utils/types';
+import { ConfigUtils } from './config/config';
 
 @Injectable()
 export class BalanceDataService {
@@ -23,8 +26,9 @@ export class BalanceDataService {
     'data',
     'balanceData.json',
   );
-  //TODO:env
-  private readonly rateServiceUrl = 'http://localhost:3000/rate';
+
+  private readonly rateServiceUrl =
+    ConfigUtils.getInstance().get('rateServerUrl');
 
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
@@ -36,7 +40,10 @@ export class BalanceDataService {
     return data.filter((entry) => entry.userId === userId);
   }
 
-  async getCalculation(userId: string, vsCoin: string) {
+  async getCalculation(
+    userId: string,
+    vsCoin: string,
+  ): Promise<AssetsCalc> {
     const ratesMap = new Map<string, number>();
     try {
       const assets = await this.getAssets(userId);
@@ -48,7 +55,7 @@ export class BalanceDataService {
 
         if (rate === undefined) {
           const res = (
-            await axios.get(
+            await axios.get<CoinEntry[]>(
               `${this.rateServiceUrl}?coin=${coin}&vs_coin=${vsCoin}`,
               {
                 headers: {
@@ -57,7 +64,11 @@ export class BalanceDataService {
               },
             )
           ).data;
-          rate = res[coin][vsCoin];
+
+          // on SUCCSSES, the object returned will have the vsCoin property
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          rate = res[vsCoin];
+
           ratesMap.set(coin, rate!); //if rate doesnt exist, rate-service throws exception
         }
 
@@ -66,7 +77,14 @@ export class BalanceDataService {
 
       return { value };
     } catch (err) {
-      throw new BadRequestException('Coin doesnt exist');
+      if (
+        axios.isAxiosError(err) &&
+        err.response?.status === HttpStatus.NOT_FOUND
+      ) {
+        throw new BadRequestException('Coin doesnt exist');
+      } else {
+        throw err;
+      }
     }
   }
 
@@ -87,6 +105,8 @@ export class BalanceDataService {
     return newEntry;
   }
 
+  //empty object neess to be returned when the asset doesnt exist
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   async removeAssets(id: number, userId: string): Promise<BalanceEntry | {}> {
     //check if user exist in the file
     const balanceEntries = await this.fileOp.readDataFromFile(
@@ -119,26 +139,26 @@ export class BalanceDataService {
     if (cachedExists) return;
 
     // Check if the full coin list is cached
-    let coinList =
-      await this.cacheManager.get<
-        { id: string; name: string; symbol: string }[]
-      >(coinListCacheKey);
+    let coinList = await this.cacheManager.get<CoinEntry[]>(coinListCacheKey);
 
     if (!coinList) {
       try {
-        const response = await axios.get(`${this.rateServiceUrl}/coin-list`, {
-          headers: { 'X-User-ID': userId },
-        });
+        const response: AxiosResponse<CoinEntry[]> = await axios.get(
+          `${this.rateServiceUrl}/coin-list`,
+          {
+            headers: { 'X-User-ID': userId },
+          },
+        );
 
         coinList = response.data;
         await this.cacheManager.set(coinListCacheKey, coinList);
-      } catch (error) {
+      } catch {
         throw new InternalServerErrorException('Failed to fetch coin list');
       }
     }
 
     // in that point of the code, the coinList is defined
-    const coinData = coinList!.find(
+    const coinData = coinList.find(
       (c) => c.name.toLowerCase() === coin.toLowerCase(),
     );
 

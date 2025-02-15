@@ -12,11 +12,15 @@ async function bootstrap() {
   });
 
   // Set up ONLY our custom logger
-  app.useLogger(new CBSLogging());
+  app.useLogger(logger);
 
-  //TODO: config + env
   const config = ConfigUtils.getInstance();
-
-  await app.listen(config.get('SERVER_PORT'));
+  const port = config.get('serverPort');
+  await app.listen(port);
+  logger.log(`Balance service start listening on post : ${port} `);
 }
-bootstrap();
+
+const logger = new CBSLogging();
+bootstrap().catch((err) => {
+  logger.error(`Error starting the balance-service: ${err}`);
+});
