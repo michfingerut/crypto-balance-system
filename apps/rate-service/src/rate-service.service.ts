@@ -23,7 +23,6 @@ export class RateService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly logger: CBSLogging,
   ) {
-    this.logger.setContext(RateService.name);
   }
 
   async getRate(coin: string, vsCoin: string) {
